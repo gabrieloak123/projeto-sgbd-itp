@@ -24,9 +24,18 @@ pk: attribute_1
 ```
 
 ### Listar tabelas
+Todas as tabelas serão listadas ao executar o comando `showtables`
+Input:
 ```
 showtables
 ```
+Output:
+```
+table_1
+table_2
+table_3
+```
+
 ### Adicionar dados
 ```
 insertinto table_name
