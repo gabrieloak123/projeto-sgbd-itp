@@ -93,3 +93,6 @@ wherepk 33617465000145
 ***
 ### 7.Apagar tabela
 Exclui a tabela digitada da lista de tabelas, cuidado
+
+### 8.Sair
+O programa é encerrado
