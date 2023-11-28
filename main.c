@@ -4,10 +4,10 @@
 #include "./functions/funcs.h"
 
 int main(){
-    int choice
-    bool continue = true;
+    int choice;
+    bool shouldContinue = true;
 
-    while(continue){
+    while(shouldContinue){
         showMenu();
         scanf("%d", &choice);
 
@@ -22,7 +22,7 @@ int main(){
             addData();
             break;
         case 4:
-            listaDataFromTable();
+            listDataFromTable();
             break;
         case 5:
             searchData();
@@ -34,14 +34,13 @@ int main(){
             dropTable();
             break;
         case 8:
-            continue = false;
+            shouldContinue = false;
             break;
         
         default:
-            printf("Opção inválida, digite novamente:")
+            printf("Opção inválida, digite novamente:");
             break;
         }
     }
-    
     return 0;
 }
