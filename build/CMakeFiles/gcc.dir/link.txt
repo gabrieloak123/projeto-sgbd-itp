@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -shared -Wl,-soname,libgcc.so -o libgcc.so CMakeFiles/gcc.dir/functions/format.c.o CMakeFiles/gcc.dir/functions/menu.c.o CMakeFiles/gcc.dir/functions/table.c.o 

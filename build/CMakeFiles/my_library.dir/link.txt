@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -shared -Wl,-soname,libmy_library.so -o libmy_library.so CMakeFiles/my_library.dir/functions/format.c.o CMakeFiles/my_library.dir/functions/menu.c.o CMakeFiles/my_library.dir/functions/table.c.o 
