@@ -1,3 +1,5 @@
+#ifndef TABLE
+#define TABLE
 
 #define TAMMAX 100
 
@@ -21,5 +23,4 @@ typedef struct {
     Row row[TAMMAX];
 } Table;
 
-
-
+#endif
