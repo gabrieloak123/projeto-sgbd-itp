@@ -2,15 +2,15 @@
 #include "funcs.h"
 
 void showMenu(){
-    printf("===========================================");
-    printf("Digite o número correspondente à operação:");
-    printf("1. Criar tabela");
-    printf("2. Listar tabelas");
-    printf("3. Adicionar dados");
-    printf("4. Listar dados");
-    printf("5. Pesquisar dados");
-    printf("6. Apagar linha");
-    printf("7. Apagar tabela");
-    printf("8. Sair");
-    printf(===========================================);
+    printf("===========================================\n");
+    printf("Digite o número correspondente à operação:\n");
+    printf("1. Criar tabela\n");
+    printf("2. Listar tabelas\n");
+    printf("3. Adicionar dados\n");
+    printf("4. Listar dados\n");
+    printf("5. Pesquisar dados\n");
+    printf("6. Apagar linha\n");
+    printf("7. Apagar tabela\n");
+    printf("8. Sair\n");
+    printf(===========================================\n);
 }
