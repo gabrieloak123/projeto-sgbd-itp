@@ -1,14 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "defs.h"
+#include "../defs.h"
 #include "funcs.h"
 
 void createTable(){
     char tableName[15];
-    //verificar se já existe tabela com esse nome
+    char attrb[20];
+    scanf(" %[^\n]", tableName);
 
-    //salvar em .txt
+    FILE *file;
+    file = fopen("~/Desktop/Projects/projeto-sgbd-itp/teste.txt", "w");
+    fprintf(file, "hello world");
+    //verificar se já existe tabela com esse nome
 }
 
 void listTables(){
@@ -22,27 +26,31 @@ void listDataFromTable(){
     //printar
 }
 
-void deleteLine(char tableName[15]){
+void deleteLine(){
+    char tableName[15];
     char pk[15];
     //verificar se a pk existe
-    listDataFromTable()
+    listDataFromTable();
     //verificar se é essa msm
     //apagar linha no txt
-    listDataFromTable()
+    listDataFromTable();
 }
 
-void dropTable(char tableName[15]){
+void dropTable(){
+    char tableName[15];
     //apagar .txt
 }
 
-void addData(char tableName[15]){
+void addData(){
+    char tableName[15];
     
     listDataFromTable();
     //verificar se a pk já existe
     //atualizar txt
 }
 
-void searchData(char tableName[15]){
+void searchData(){
+    char tableName[15];
     char nameCol[15];
     char filter[2];
     //bater o filtro com o tipo de dado da coluna
