@@ -6,7 +6,7 @@ void showMenu();
 
 void createTable();
 void listTables();
-void listaDataFromTable();
+void listDataFromTable();
 void deleteLine();
 void dropTable();
 void addData();
