@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "defs.h"
+#include "funcs.h"
 
 void createTable(){
     char tableName[15];
