@@ -12,5 +12,5 @@ void showMenu(){
     printf("6. Apagar linha\n");
     printf("7. Apagar tabela\n");
     printf("8. Sair\n");
-    printf(===========================================\n);
+    printf("===========================================\n");
 }
