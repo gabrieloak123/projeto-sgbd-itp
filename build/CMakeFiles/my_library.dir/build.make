@@ -73,43 +73,43 @@ CMakeFiles/my_library.dir/functions/format.c.o: CMakeFiles/my_library.dir/flags.
 CMakeFiles/my_library.dir/functions/format.c.o: /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c
 CMakeFiles/my_library.dir/functions/format.c.o: CMakeFiles/my_library.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/my_library.dir/functions/format.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/my_library.dir/functions/format.c.o -MF CMakeFiles/my_library.dir/functions/format.c.o.d -o CMakeFiles/my_library.dir/functions/format.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/my_library.dir/functions/format.c.o -MF CMakeFiles/my_library.dir/functions/format.c.o.d -o CMakeFiles/my_library.dir/functions/format.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c
 
 CMakeFiles/my_library.dir/functions/format.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/my_library.dir/functions/format.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c > CMakeFiles/my_library.dir/functions/format.c.i
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c > CMakeFiles/my_library.dir/functions/format.c.i
 
 CMakeFiles/my_library.dir/functions/format.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/my_library.dir/functions/format.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c -o CMakeFiles/my_library.dir/functions/format.c.s
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c -o CMakeFiles/my_library.dir/functions/format.c.s
 
 CMakeFiles/my_library.dir/functions/menu.c.o: CMakeFiles/my_library.dir/flags.make
 CMakeFiles/my_library.dir/functions/menu.c.o: /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c
 CMakeFiles/my_library.dir/functions/menu.c.o: CMakeFiles/my_library.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/my_library.dir/functions/menu.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/my_library.dir/functions/menu.c.o -MF CMakeFiles/my_library.dir/functions/menu.c.o.d -o CMakeFiles/my_library.dir/functions/menu.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/my_library.dir/functions/menu.c.o -MF CMakeFiles/my_library.dir/functions/menu.c.o.d -o CMakeFiles/my_library.dir/functions/menu.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c
 
 CMakeFiles/my_library.dir/functions/menu.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/my_library.dir/functions/menu.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c > CMakeFiles/my_library.dir/functions/menu.c.i
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c > CMakeFiles/my_library.dir/functions/menu.c.i
 
 CMakeFiles/my_library.dir/functions/menu.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/my_library.dir/functions/menu.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c -o CMakeFiles/my_library.dir/functions/menu.c.s
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c -o CMakeFiles/my_library.dir/functions/menu.c.s
 
 CMakeFiles/my_library.dir/functions/table.c.o: CMakeFiles/my_library.dir/flags.make
 CMakeFiles/my_library.dir/functions/table.c.o: /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c
 CMakeFiles/my_library.dir/functions/table.c.o: CMakeFiles/my_library.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/my_library.dir/functions/table.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/my_library.dir/functions/table.c.o -MF CMakeFiles/my_library.dir/functions/table.c.o.d -o CMakeFiles/my_library.dir/functions/table.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/my_library.dir/functions/table.c.o -MF CMakeFiles/my_library.dir/functions/table.c.o.d -o CMakeFiles/my_library.dir/functions/table.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c
 
 CMakeFiles/my_library.dir/functions/table.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/my_library.dir/functions/table.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c > CMakeFiles/my_library.dir/functions/table.c.i
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c > CMakeFiles/my_library.dir/functions/table.c.i
 
 CMakeFiles/my_library.dir/functions/table.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/my_library.dir/functions/table.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c -o CMakeFiles/my_library.dir/functions/table.c.s
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c -o CMakeFiles/my_library.dir/functions/table.c.s
 
 # Object files for target my_library
 my_library_OBJECTS = \
