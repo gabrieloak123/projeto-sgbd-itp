@@ -6,13 +6,22 @@
 
 void createTable(){
     char tableName[15];
-    char attrb[20];
+    char attribute[25];
+
     scanf(" %[^\n]", tableName);
 
     FILE *file;
-    file = fopen("~/Desktop/Projects/projeto-sgbd-itp/teste.txt", "w");
-    fprintf(file, "hello world");
+    file = fopen("txts/teste.txt", "w");
+    fprintf(file, "hello world!");
+    fclose(file);
+
+    while(strcmp("stop", attribute)){
+        //ler nome do atributo
+    }
+    
     //verificar se já existe tabela com esse nome
+
+
 }
 
 void listTables(){
