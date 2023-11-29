@@ -7,7 +7,12 @@
 void createTable(){
     char tableName[15];
     //verificar se já existe tabela com esse nome
-
+    printf("Digite o nome da tabela:");
+    scanf(" %s",tableName);
+    FILE *tabela = fopen(tableName,"r");
+    if (tabela!=NULL){
+        printf("Tabela já existe.\n");
+    }
     //salvar em .txt
 }
 
