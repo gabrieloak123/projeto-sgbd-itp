@@ -52,3 +52,19 @@ void searchData(char tableName[15]){
     char filter[2];
     //bater o filtro com o tipo de dado da coluna
 }
+void tablechecker(char tableName[15]){
+    //verificar se a tabela existe
+    printf("Digite o nome da tabela:");
+    scanf(" %s",tableName[15]);
+    FILE *tabela= fopen(tableName[15],"r");
+    if {*tabela == NULL}{
+        printf("Essa tabela não existe.\n");
+        printf("Deseja criar tabela? s/n\n");
+        char resposta;
+        switch (resposta){
+            case 's': createTable(),break;
+            case 'n': exit:(0),break;
+        }
+        exit(0);
+    }
+}
