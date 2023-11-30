@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include "../defs.h"
 #include "funcs.h"
@@ -10,7 +11,17 @@ void createTable(){
 
     scanf(" %[^\n]", tableName);
 
+    //verificar se o nome já existe no tableNamesFile
+    //se existir pedir outro nome
+    //adicionar o nome no tableNamesFile
+    //caso não exista entrar no loop de declaração de atributos
+        //criar o arquivo daquela tabela
+        //verificar se o tipo é válido
+        //verificar se o nome já existe
+
     FILE *file;
+
+
     file = fopen("txts/teste.txt", "w");
     fprintf(file, "hello world!");
     fclose(file);
@@ -24,8 +35,17 @@ void createTable(){
 
 }
 
-void listTables(){
-    char tableName[15];
+void listTables(FILE *tableNamesFile){
+    system("clear");
+
+    tableNamesFile = fopen("txts/main.txt", "r");
+    char text[100];
+
+    while(fgets(text, 100, tableNamesFile) != NULL){
+        printf("%s", text);
+    }
+
+    fclose(tableNamesFile);
 }
 
 void listDataFromTable(){
