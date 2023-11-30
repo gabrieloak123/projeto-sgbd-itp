@@ -1,13 +1,20 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include "./functions/funcs.h"
 
 int main(){
-    int choice
-    bool continue = true;
+    FILE *tableNames;
 
-    while(continue){
+    tableNames = fopen("txts/main.txt", "w");
+    fprintf(tableNames, "hello world!\n");
+    fclose(tableNames);
+
+    int choice;
+    bool shouldContinue = true;
+
+    while(shouldContinue){
         showMenu();
         scanf("%d", &choice);
 
@@ -16,13 +23,13 @@ int main(){
             createTable();
             break;
         case 2:
-            listTables();
+            listTables(tableNames);
             break;
         case 3:
             addData();
             break;
         case 4:
-            listaDataFromTable();
+            listDataFromTable();
             break;
         case 5:
             searchData();
@@ -34,14 +41,13 @@ int main(){
             dropTable();
             break;
         case 8:
-            continue = false;
+            shouldContinue = false;
             break;
         
         default:
-            printf("Opção inválida, digite novamente:")
+            printf("Opção inválida, digite novamente:\n");
             break;
         }
     }
-    
     return 0;
 }

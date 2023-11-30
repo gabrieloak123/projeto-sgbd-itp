@@ -1,0 +1,1 @@
+/usr/bin/gcc -g CMakeFiles/main.dir/main.c.o -o main  -Wl,-rpath,/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build libmy_library.so 

@@ -5,10 +5,10 @@
 
 typedef struct {
     union{
-        int attrbI;
-        float attrbF;
-        char attrbC;
-        char attrbS[15];
+        int intValue;
+        float floatValue;
+        char charValue;
+        char stringValue[15];
     }
 } Column;
 

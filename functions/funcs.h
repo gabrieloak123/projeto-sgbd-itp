@@ -5,8 +5,8 @@ void printLine(int size);
 void showMenu();
 
 void createTable();
-void listTables();
-void listaDataFromTable();
+void listTables(FILE *tableNamesFile);
+void listDataFromTable();
 void deleteLine();
 void dropTable();
 void addData();
