@@ -17,7 +17,7 @@ int main(){
     while(shouldContinue){
         showMenu();
         scanf("%d", &choice);
-
+        
         switch (choice){
         case 1:
             createTable();
