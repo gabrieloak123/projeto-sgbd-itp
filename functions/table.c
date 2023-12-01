@@ -13,7 +13,10 @@ void createTable(){
     if (tabela!=NULL){
         printf("Tabela já existe.\n");
     }
-    //salvar em .txt
+    fclose(FILE *tabela);
+    FILE *tabela = fopen(tableName, "w");
+    //escrever o arquivo .txt
+    fclose(FILE *tabelaName); 
 }
 
 void listTables(){
@@ -45,7 +48,7 @@ void dropTable(char tableName[15]){
 }
 
 void addData(char tableName[15]){
-    
+    tablechecker(char tableName);
     listDataFromTable();
     //verificar se a pk já existe
     //atualizar txt
@@ -66,6 +69,7 @@ void tablechecker(char tableName[15]){
         printf("Essa tabela não existe.\n");
         printf("Deseja criar tabela? s/n\n");
         char resposta;
+        scanf(" %s",resposta);
         switch (resposta){
             case 's': createTable(),break;
             case 'n': exit:(0),break;
