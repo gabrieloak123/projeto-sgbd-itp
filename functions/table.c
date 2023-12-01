@@ -18,16 +18,19 @@ void createTable(){
 
 void listTables(){
     char tableName[15];
+    tablechecker(char tableName);
 }
 
 void listDataFromTable(){
     char tableName[15];
+    tablechecker(char tableName);
 
     //importar do txt
     //printar
 }
 
 void deleteLine(char tableName[15]){
+    tablechecker(char tableName);
     char pk[15];
     //verificar se a pk existe
     listDataFromTable()
@@ -37,6 +40,7 @@ void deleteLine(char tableName[15]){
 }
 
 void dropTable(char tableName[15]){
+    tablechecker(char tableName);
     //apagar .txt
 }
 
@@ -58,6 +62,7 @@ void tablechecker(char tableName[15]){
     scanf(" %s",tableName[15]);
     FILE *tabela= fopen(tableName[15],"r");
     if {*tabela == NULL}{
+        fclose(FILE *tabela);
         printf("Essa tabela não existe.\n");
         printf("Deseja criar tabela? s/n\n");
         char resposta;
@@ -65,6 +70,5 @@ void tablechecker(char tableName[15]){
             case 's': createTable(),break;
             case 'n': exit:(0),break;
         }
-        exit(0);
     }
 }
