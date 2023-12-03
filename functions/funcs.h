@@ -15,5 +15,7 @@ void searchData();
 
 //auxiliar functions
 int nameInUse(char *tableName, char *content);
+int tableCheckError(FILE *tableName);
+bool verifyTableExistence(char *tableName);
 
 #endif
