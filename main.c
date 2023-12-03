@@ -6,10 +6,10 @@
 
 int main(){
     FILE *tableOfNames;
-    char stringTeste[100] = "hello\nworld\nhelloworld";
+    //char *stringTeste = "hello\nworld\nhelloworld\n";
 
     tableOfNames = fopen("txts/tableNames.txt", "w");
-    fwrite(stringTeste, sizeof(char), 100, tableOfNames);
+    //fwrite(stringTeste, sizeof(char), strlen(stringTeste), tableOfNames);
     fclose(tableOfNames);
 
     //lembrar de usar o system("clear")
