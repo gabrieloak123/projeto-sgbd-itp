@@ -7,28 +7,52 @@
 
 void createTable(){
     char tableName[15];
-    char attribute[25];
-
+    char tableOfNamesContent[100];
     FILE *tableOfNames;
-    char content[100];
     
     tableOfNames = fopen("txts/tableNames.txt", "r++");
+
+    //verifica se abriu direito
+    tableCheckError(tableOfNames);
     
     printf("Digite o nome da tabela:");
     scanf(" %[^\n]", tableName);
-    fread(&content, sizeof(char), 100, tableOfNames);
 
-    if(nameInUse(tableName, content)){
-        printf("Nome em uso, use outro\n");
-    } else {
-        //escrever adicionar o nome da tabela no txt
+    //verificar se o conteúdo foi lido direito
+    if(fread(&tableOfNamesContent, sizeof(char), 100, tableOfNames) == 0){
+        perror("Erro ao ler o conteúdo");
+        fclose(tableOfNames);
+        return;
     }
 
-    fclose(tableOfNames);
-    
+    //verifica se o nome digitado já está em uso
+    if(nameInUse(tableName, tableOfNamesContent)){
+        printf("Nome em uso, use outro\n");
+    } else {
+        FILE *newTable;
 
-    //verificar se o nome já existe no tableNamesFile
-    //se existir pedir outro nome
+        //manipula o nome do arquivo
+        char fileName[25];
+        sprintf(fileName, "txts/%s.txt", tableName);
+        newTable = fopen(fileName, "w");
+
+        //input genérico só pra ver se o arquivo funciona
+        char *text = "olá mundo";
+        fwrite(text, sizeof(char), strlen(text), newTable);
+
+        //adiciona o nome da tabela no arquivo de nomes(tem que ajeitar o \n)
+        fwrite(strcat(tableName, "\n"), sizeof(char), strlen(tableName), tableOfNames);
+        fclose(tableOfNames);
+
+        char colType[10];
+        char colName[25];
+        while(strcmp("stop", colName)){
+            scanf("%s %s", colType, colName);
+
+        }
+        fclose(newTable);
+    }
+
     //adicionar o nome no tableNamesFile
     //caso não exista entrar no loop de declaração de atributos
         //criar o arquivo daquela tabela
@@ -75,7 +99,21 @@ void deleteLine(){
 
 void dropTable(){
     char tableName[15];
-    //apagar .txt
+    char fileName[25];
+
+    printf("Digite a tabela que deseja deletar:\n");
+    scanf(" %[^\n]", tableName);
+
+    //if (nome existe no nameOfTables) then (oq tem aqui embaixo ) else (tabela não existe)
+
+    sprintf(fileName, "txts/%s.txt", tableName);
+
+    if(remove(fileName) == 0){
+        printf("Tabela deletada\n");
+    } else {
+        printf("Erro ao deletar a tabela")
+    }
+
 }
 
 void addData(){
