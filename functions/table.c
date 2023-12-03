@@ -9,7 +9,23 @@ void createTable(){
     char tableName[15];
     char attribute[25];
 
+    FILE *tableOfNames;
+    char content[100];
+    
+    tableOfNames = fopen("txts/tableNames.txt", "r++");
+    
+    printf("Digite o nome da tabela:");
     scanf(" %[^\n]", tableName);
+    fread(&content, sizeof(char), 100, tableOfNames);
+
+    if(nameInUse(tableName, content)){
+        printf("Nome em uso, use outro\n");
+    } else {
+        //escrever adicionar o nome da tabela no txt
+    }
+
+    fclose(tableOfNames);
+    
 
     //verificar se o nome já existe no tableNamesFile
     //se existir pedir outro nome
@@ -19,16 +35,10 @@ void createTable(){
         //verificar se o tipo é válido
         //verificar se o nome já existe
 
-    FILE *file;
 
-
-    file = fopen("txts/teste.txt", "w");
-    fprintf(file, "hello world!");
-    fclose(file);
-
-    while(strcmp("stop", attribute)){
-        //ler nome do atributo
-    }
+    // while(strcmp("stop", attribute)){
+    //     //ler nome do atributo
+    // }
     
     //verificar se já existe tabela com esse nome
 
@@ -36,9 +46,7 @@ void createTable(){
 }
 
 void listTables(FILE *tableNamesFile){
-    system("clear");
-
-    tableNamesFile = fopen("txts/main.txt", "r");
+    tableNamesFile = fopen("txts/tableNames.txt", "r");
     char text[100];
 
     while(fgets(text, 100, tableNamesFile) != NULL){
