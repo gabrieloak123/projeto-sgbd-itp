@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/auxfuncs.c" "CMakeFiles/my_library.dir/functions/auxfuncs.c.o" "gcc" "CMakeFiles/my_library.dir/functions/auxfuncs.c.o.d"
   "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/format.c" "CMakeFiles/my_library.dir/functions/format.c.o" "gcc" "CMakeFiles/my_library.dir/functions/format.c.o.d"
   "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/menu.c" "CMakeFiles/my_library.dir/functions/menu.c.o" "gcc" "CMakeFiles/my_library.dir/functions/menu.c.o.d"
   "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/table.c" "CMakeFiles/my_library.dir/functions/table.c.o" "gcc" "CMakeFiles/my_library.dir/functions/table.c.o.d"

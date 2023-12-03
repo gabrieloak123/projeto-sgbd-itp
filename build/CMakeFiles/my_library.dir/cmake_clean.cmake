@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/my_library.dir/functions/auxfuncs.c.o"
+  "CMakeFiles/my_library.dir/functions/auxfuncs.c.o.d"
   "CMakeFiles/my_library.dir/functions/format.c.o"
   "CMakeFiles/my_library.dir/functions/format.c.o.d"
   "CMakeFiles/my_library.dir/functions/menu.c.o"

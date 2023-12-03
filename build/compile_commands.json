@@ -16,6 +16,11 @@
 },
 {
   "directory": "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build",
+  "command": "/usr/bin/gcc -Dmy_library_EXPORTS  -g -fPIC -std=gnu11 -o CMakeFiles/my_library.dir/functions/auxfuncs.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/auxfuncs.c",
+  "file": "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/functions/auxfuncs.c"
+},
+{
+  "directory": "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build",
   "command": "/usr/bin/gcc   -g -std=gnu11 -o CMakeFiles/main.dir/main.c.o -c /home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/main.c",
   "file": "/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/main.c"
 }

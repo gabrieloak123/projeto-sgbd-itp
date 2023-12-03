@@ -142,6 +142,30 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+functions/auxfuncs.o: functions/auxfuncs.c.o
+.PHONY : functions/auxfuncs.o
+
+# target to build an object file
+functions/auxfuncs.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_library.dir/build.make CMakeFiles/my_library.dir/functions/auxfuncs.c.o
+.PHONY : functions/auxfuncs.c.o
+
+functions/auxfuncs.i: functions/auxfuncs.c.i
+.PHONY : functions/auxfuncs.i
+
+# target to preprocess a source file
+functions/auxfuncs.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_library.dir/build.make CMakeFiles/my_library.dir/functions/auxfuncs.c.i
+.PHONY : functions/auxfuncs.c.i
+
+functions/auxfuncs.s: functions/auxfuncs.c.s
+.PHONY : functions/auxfuncs.s
+
+# target to generate assembly for a file
+functions/auxfuncs.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/my_library.dir/build.make CMakeFiles/my_library.dir/functions/auxfuncs.c.s
+.PHONY : functions/auxfuncs.c.s
+
 functions/format.o: functions/format.c.o
 .PHONY : functions/format.o
 
@@ -248,6 +272,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... main"
 	@echo "... my_library"
+	@echo "... functions/auxfuncs.o"
+	@echo "... functions/auxfuncs.i"
+	@echo "... functions/auxfuncs.s"
 	@echo "... functions/format.o"
 	@echo "... functions/format.i"
 	@echo "... functions/format.s"
