@@ -16,3 +16,16 @@ int nameInUse(char *tableName, char *content){
     }
     return 0;
 }
+
+int tableCheckError(FILE *tableName){
+    if(tableName == NULL){
+        perror("Erro ao abrir o arquivo de nomes de tabela");
+        fclose(tableName);
+        return 1;
+    }
+    return 0;
+}
+
+bool verifyTableExistence(char *tableName){
+
+}
