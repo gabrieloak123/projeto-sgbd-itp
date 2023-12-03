@@ -5,11 +5,14 @@
 #include "./functions/funcs.h"
 
 int main(){
-    FILE *tableNames;
+    FILE *tableOfNames;
+    char stringTeste[100] = "hello\nworld\nhelloworld";
 
-    tableNames = fopen("txts/main.txt", "w");
-    fprintf(tableNames, "hello world!\n");
-    fclose(tableNames);
+    tableOfNames = fopen("txts/tableNames.txt", "w");
+    fwrite(stringTeste, sizeof(char), 100, tableOfNames);
+    fclose(tableOfNames);
+
+    //lembrar de usar o system("clear")
 
     int choice;
     bool shouldContinue = true;
@@ -19,11 +22,14 @@ int main(){
         scanf("%d", &choice);
         
         switch (choice){
+        case 0:
+            shouldContinue = false;
+            break;
         case 1:
             createTable();
             break;
         case 2:
-            listTables(tableNames);
+            listTables(tableOfNames);
             break;
         case 3:
             addData();
@@ -40,10 +46,6 @@ int main(){
         case 7:
             dropTable();
             break;
-        case 8:
-            shouldContinue = false;
-            break;
-        
         default:
             printf("Opção inválida, digite novamente:\n");
             break;
