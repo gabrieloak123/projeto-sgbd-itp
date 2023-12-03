@@ -10,7 +10,7 @@ typedef enum{
     DOUBLE,
     CHAR,
     STRING,
-} Type
+} Type;
 
 typedef struct {
     Type type;
