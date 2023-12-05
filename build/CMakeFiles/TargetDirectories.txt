@@ -1,4 +1,0 @@
-/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build/CMakeFiles/my_library.dir
-/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build/CMakeFiles/main.dir
-/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build/CMakeFiles/edit_cache.dir
-/home/gabrieloak/Desktop/Projects/projeto-sgbd-itp/build/CMakeFiles/rebuild_cache.dir
