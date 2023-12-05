@@ -49,6 +49,11 @@ void createTable(){
         while(strcmp("stop", colName)){
             scanf("%s %s", colType, colName);
 
+            if(typeAllowed(colType)){
+                
+            } else {
+                printf("Digite um tipo válido\n");
+            }
         }
         fclose(newTable);
     }
