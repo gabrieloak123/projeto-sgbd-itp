@@ -3,13 +3,23 @@
 
 #define TAMMAX 100
 
+typedef enum{
+    EMPTY,
+    INT,
+    FLOAT,
+    DOUBLE,
+    CHAR,
+    STRING,
+} Type;
+
 typedef struct {
+    Type type;
     union{
         int intValue;
         float floatValue;
         char charValue;
         char stringValue[15];
-    }
+    } value;
 } Column;
 
 typedef struct {
