@@ -111,7 +111,7 @@ void dropTable(){
     if(remove(fileName) == 0){
         printf("Tabela deletada\n");
     } else {
-        printf("Erro ao deletar a tabela")
+        printf("Erro ao deletar a tabela");
     }
 
 }

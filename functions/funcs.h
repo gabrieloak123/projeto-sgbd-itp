@@ -1,6 +1,6 @@
+#include <stdbool.h>
 #ifndef FUNCS
 #define FUNCS
-
 void printLine(int size);
 void showMenu();
 
