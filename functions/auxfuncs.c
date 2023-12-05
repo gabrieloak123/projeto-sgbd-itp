@@ -26,6 +26,13 @@ int tableCheckError(FILE *tableName){
     return 0;
 }
 
-bool verifyTableExistence(char *tableName){
+bool typeAllowed(char *maybeType){
+    char* allowedTypes = {"int", "float", "double", "char", "string"};
 
+    for(int i = 0; i < 5; i++){
+        if(strcasecmp(maybeType, allowedTypes[i] == 0)){
+            return true;
+        }
+    }
+    return false;
 }
