@@ -4,6 +4,7 @@
 void showMenu(){
     printf("===========================================\n");
     printf("Digite o número correspondente à operação:\n");
+    printf("0. Sair\n");
     printf("1. Criar tabela\n");
     printf("2. Listar tabelas\n");
     printf("3. Adicionar dados\n");
@@ -11,6 +12,5 @@ void showMenu(){
     printf("5. Pesquisar dados\n");
     printf("6. Apagar linha\n");
     printf("7. Apagar tabela\n");
-    printf("8. Sair\n");
-    printf(===========================================\n);
+    printf("===========================================\n");
 }

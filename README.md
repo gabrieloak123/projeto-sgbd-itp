@@ -6,6 +6,7 @@ Ao iniciar o programa será aberto um menu com as seguintes opções:
 ```
 ===========================================
 Digite o número correspondente à operação:
+0. Sair
 1. Criar tabela
 2. Listar tabelas
 3. Adicionar dados
@@ -13,9 +14,10 @@ Digite o número correspondente à operação:
 5. Pesquisar dados
 6. Apagar linha
 7. Apagar tabela
-8. Sair
 ===========================================
 ```
+### 0.Sair
+O programa é encerrado
 
 ### 1.Criar tabela
 Digite o nome da tabela e em seguida os atributos, o padrão de inserção de atributos é `type name`, nos quais os tipos são os primitivos de C:
@@ -93,6 +95,3 @@ wherepk 33617465000145
 ***
 ### 7.Apagar tabela
 Exclui a tabela digitada da lista de tabelas, cuidado
-
-### 8.Sair
-O programa é encerrado
