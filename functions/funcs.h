@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #ifndef FUNCS
 #define FUNCS
 
@@ -17,5 +18,6 @@ void searchData();
 int nameInUse(char *tableName, char *content);
 int tableCheckError(FILE *tableName);
 bool typeAllowed(char *maybeType);
+void readTableName(char *tableName);
 
 #endif
