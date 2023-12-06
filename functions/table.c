@@ -10,68 +10,69 @@ void createTable(){
     char tableOfNamesContent[100];
     FILE *tableOfNames;
     
-    tableOfNames = fopen("txts/tableNames.txt", "r++");
+    //é melhor só adicionar o nome da tabela no fim, pra garantir que tabelas abortadas n salvem
+    tableOfNames = fopen("txts/tableNames.txt", "r+");
 
     //verifica se abriu direito
-    tableCheckError(tableOfNames);
-    
-    printf("Digite o nome da tabela:");
-    scanf(" %[^\n]", tableName);
-
-    //verificar se o conteúdo foi lido direito
-    if(fread(&tableOfNamesContent, sizeof(char), 100, tableOfNames) == 0){
-        perror("Erro ao ler o conteúdo");
-        fclose(tableOfNames);
+    if(tableCheckError(tableOfNames)){
         return;
-    }
+    };
+    
+    readTableName(tableName);
+    
 
     //verifica se o nome digitado já está em uso
     if(nameInUse(tableName, tableOfNamesContent)){
         printf("Nome em uso, use outro\n");
     } else {
         FILE *newTable;
+        char colType[10];
+        char colName[25];
+        char fileName[25];
 
         //manipula o nome do arquivo
-        char fileName[25];
         sprintf(fileName, "txts/%s.txt", tableName);
-        newTable = fopen(fileName, "w");
+        newTable = fopen(fileName, "r+");
 
         //input genérico só pra ver se o arquivo funciona
-        char *text = "olá mundo";
-        fwrite(text, sizeof(char), strlen(text), newTable);
+        char format[30];
+        sprintf(format, "%s\n", tableName);
+        fwrite(format, sizeof(char), strlen(format), newTable);
+
+        format = "===============================\n";
+        fwrite(format, sizeof(char), strlen(format), newTable);
 
         //adiciona o nome da tabela no arquivo de nomes(tem que ajeitar o \n)
         fwrite(strcat(tableName, "\n"), sizeof(char), strlen(tableName), tableOfNames);
         fclose(tableOfNames);
 
-        char colType[10];
-        char colName[25];
-        while(strcmp("stop", colName)){
+        //cadastrar os atributos
+        while(true){
             scanf("%s %s", colType, colName);
 
+            if(strcmp("stop", colType) == 0){
+                break;
+            }
+
             if(typeAllowed(colType)){
-                
+                //função q verifica o nome das colunas
+                if(nameInUse(colName, newTable)){
+                    char text[25];
+                    sprintf(text, "%s - %s\n", colType, colName);
+                } else {
+                    printf("Nome de coluna já em uso\n");
+                }
+
             } else {
-                printf("Digite um tipo válido\n");
+                printf("Digite um tipo válido");
             }
         }
+
+        fwrite(format, sizeof(char), strlen(format), newTable);
+
+
         fclose(newTable);
     }
-
-    //adicionar o nome no tableNamesFile
-    //caso não exista entrar no loop de declaração de atributos
-        //criar o arquivo daquela tabela
-        //verificar se o tipo é válido
-        //verificar se o nome já existe
-
-
-    // while(strcmp("stop", attribute)){
-    //     //ler nome do atributo
-    // }
-    
-    //verificar se já existe tabela com esse nome
-
-
 }
 
 void listTables(FILE *tableNamesFile){
@@ -116,7 +117,7 @@ void dropTable(){
     if(remove(fileName) == 0){
         printf("Tabela deletada\n");
     } else {
-        printf("Erro ao deletar a tabela")
+        printf("Erro ao deletar a tabela");
     }
 
 }
