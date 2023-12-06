@@ -27,12 +27,17 @@ int tableCheckError(FILE *tableName){
 }
 
 bool typeAllowed(char *maybeType){
-    char* allowedTypes = {"int", "float", "double", "char", "string"};
+    char allowedTypes[5][8] = {"int", "float", "double", "char", "string"};
 
     for(int i = 0; i < 5; i++){
-        if(strcasecmp(maybeType, allowedTypes[i] == 0)){
+        if(strcasecmp(maybeType, allowedTypes[i]) == 0){
             return true;
         }
     }
     return false;
+}
+
+void readTableName(char *tableName){
+    printf("Digite o nome da tabela:");
+    scanf(" %[^\n]", tableName);
 }
