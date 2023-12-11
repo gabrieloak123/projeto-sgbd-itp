@@ -9,7 +9,7 @@ int main(){
     bool shouldContinue = true;
     
     initMainTable();
-    //lembrar de usar o system("clear")
+    
     while(shouldContinue){
         showMenu();
         scanf("%d", &choice);
