@@ -89,30 +89,32 @@ void readTableName(char *tableName){
 void readTableContent(FILE *table, char *tableContent, int maxSize){
     int bytesRead = fread(tableContent, sizeof(char), maxSize - 1, table);
     tableContent[bytesRead] = '\0';
-
-    if (ferror(table)) {
-        perror("Erro ao ler o conteúdo");
-        fclose(table);
-    }
 }
 
 void addColumnToFile(FILE *table, char *colType, char *colName){
     char format[MAX_COL_NAME + MAX_COL_TYPE + 5]; // 5 = strlen(" - \n") + 1 (null terminator)
     snprintf(format, sizeof(format), "%s - %s\n", colType, colName);
-    fwrite(format, sizeof(char), strlen(format), table);
+    if (table != NULL) {
+        fwrite(format, sizeof(char), strlen(format), table);
+    } else {
+        printf("Erro ao abrir o arquivo (addColumnToFile)\n");
+    }
 }
 
 void readColumns(FILE *table){
     char colType[MAX_COL_TYPE];
     char colName[MAX_COL_NAME];
+    int counter = 0;
 
     while (true) {
+        printf("Digite o tipo da coluna (stop para parar):");
         scanf("%s", colType);
 
         if (strcmp("stop", colType) == 0) {
             break;
         }
 
+        printf("Digite o nome da coluna:");
         scanf("%s", colName);
 
         if (typeAllowed(colType)) {
@@ -121,8 +123,10 @@ void readColumns(FILE *table){
             if (isTableNameInUse(colName, content)) {
                 printf("Nome de coluna já em uso\n");
             } else {
-                addColumnToFile(table, colType, colName);
+                // addColumnToFile(table, colType, colName);
+                fprintf(table, "%s - %s\n", colType, colName);
             }
+            counter++;
         } else {
             printf("Digite um tipo válido\n");
         }
