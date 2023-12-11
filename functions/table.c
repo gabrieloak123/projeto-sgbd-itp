@@ -5,81 +5,55 @@
 #include "../defs.h"
 #include "funcs.h"
 
-void createTable(){
-    char tableName[15];
-    char tableOfNamesContent[100];
+#define MAX_TABLE_NAME 20
+#define MAX_NAMES_CONTENT 100
+#define MAX_COL_TYPE 10
+#define MAX_COL_NAME 25
+#define MAX_FILE_NAME 25
+
+void createTable() {
+    char tableName[MAX_TABLE_NAME];
+    char tableOfNamesContent[MAX_NAMES_CONTENT];
     FILE *tableOfNames;
-    
-    //é melhor só adicionar o nome da tabela no fim, pra garantir que tabelas abortadas n salvem
-    tableOfNames = fopen("txts/tableNames.txt", "r+");
 
-    //verifica se abriu direito
-    if(tableCheckError(tableOfNames)){
+    tableOfNames = fopen("txts/main.txt", "r+");
+
+    //verifica se o arquivo existe
+    if (tableCheckError(tableOfNames)) {
         return;
-    };
-    
-    readTableName(tableName);
-    
+    }
 
-    //verifica se o nome digitado já está em uso
-    if(nameInUse(tableName, tableOfNamesContent)){
+    readTableContent(tableOfNames, tableOfNamesContent, sizeof(tableOfNamesContent));
+    readTableName(tableName);
+
+    if (isTableNameInUse(tableName, tableOfNamesContent)) {
         printf("Nome em uso, use outro\n");
     } else {
+        char *fileName = malloc(strlen(tableName) + 10);
         FILE *newTable;
-        char colType[10];
-        char colName[25];
-        char fileName[25];
 
-        //manipula o nome do arquivo
-        sprintf(fileName, "txts/%s.txt", tableName);
-        newTable = fopen(fileName, "r+");
+        snprintf(fileName, strlen(fileName), "txts/%s.txt", tableName);
+        newTable = fopen(fileName, "w");
+        
+        readColumns(newTable);
+        printf("readdepois\n");
 
-        //input genérico só pra ver se o arquivo funciona
-        char format[30];
-        sprintf(format, "%s\n", tableName);
-        fwrite(format, sizeof(char), strlen(format), newTable);
-
-        format = "===============================\n";
-        fwrite(format, sizeof(char), strlen(format), newTable);
-
-        //adiciona o nome da tabela no arquivo de nomes(tem que ajeitar o \n)
-        fwrite(strcat(tableName, "\n"), sizeof(char), strlen(tableName), tableOfNames);
+        fprintf(tableOfNames, "%s\n", tableName);
         fclose(tableOfNames);
-
-        //cadastrar os atributos
-        while(true){
-            scanf("%s %s", colType, colName);
-
-            if(strcmp("stop", colType) == 0){
-                break;
-            }
-
-            if(typeAllowed(colType)){
-                //função q verifica o nome das colunas
-                if(nameInUse(colName, newTable)){
-                    char text[25];
-                    sprintf(text, "%s - %s\n", colType, colName);
-                } else {
-                    printf("Nome de coluna já em uso\n");
-                }
-
-            } else {
-                printf("Digite um tipo válido");
-            }
-        }
-
-        fwrite(format, sizeof(char), strlen(format), newTable);
-
 
         fclose(newTable);
     }
 }
 
-void listTables(FILE *tableNamesFile){
-    tableNamesFile = fopen("txts/tableNames.txt", "r");
+void listTables(){
+    //ajeitar, ignorar nova primeiras linhas
+    FILE *tableNamesFile = fopen("txts/main.txt", "r");
     char text[100];
 
     while(fgets(text, 100, tableNamesFile) != NULL){
+        if(strstr(text, "==================") != NULL){
+            break;
+        }
         printf("%s", text);
     }
 
