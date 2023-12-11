@@ -29,20 +29,29 @@ void createTable() {
     if (isTableNameInUse(tableName, tableOfNamesContent)) {
         printf("Nome em uso, use outro\n");
     } else {
-        char *fileName = malloc(strlen(tableName) + 10);
+        int fileNameSize = strlen(tableName) + 10;
+        char *fileName = malloc(fileNameSize);
         FILE *newTable;
 
-        snprintf(fileName, strlen(fileName), "txts/%s.txt", tableName);
+        snprintf(fileName, fileNameSize, "txts/%s.txt", tableName);
         newTable = fopen(fileName, "w");
-        
+
+        if (newTable == NULL) {
+            printf("Erro ao criar a tabela\n");
+            free(fileName);
+            return;
+        }
+
         readColumns(newTable);
         printf("readdepois\n");
 
         fprintf(tableOfNames, "%s\n", tableName);
-        fclose(tableOfNames);
 
         fclose(newTable);
+        free(fileName);
     }
+
+    fclose(tableOfNames);
 }
 
 void listTables(){
