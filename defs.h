@@ -18,7 +18,7 @@ typedef struct {
         int intValue;
         float floatValue;
         char charValue;
-        char stringValue[15];
+        char *stringValue;
     } value;
 } Column;
 
