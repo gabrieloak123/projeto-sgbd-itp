@@ -4,7 +4,6 @@ project(projeto-sgbd-itp C)
 set(CMAKE_C_STANDARD 11)
 
 add_library(my_library SHARED
-    ./functions/format.c
     ./functions/menu.c
     ./functions/table.c
     ./functions/auxfuncs.c
