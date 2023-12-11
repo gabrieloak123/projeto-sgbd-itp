@@ -18,7 +18,7 @@ void searchData();
 //auxiliar functions
 void showMenu();
 bool typeAllowed(char *maybeType);
-int isTableNameInUse(char *tableName, char *content);
+int isnameInUse(char *tableName, char *content);
 int tableCheckError(FILE *tableName);
 void readTableName(char *tableName);
 void changeTablesQuantity(int addOrDropValue);
