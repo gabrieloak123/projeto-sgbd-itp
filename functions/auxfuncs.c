@@ -23,16 +23,8 @@ void initMainTable() {
 
     if (tableOfNames == NULL) {
         tableOfNames = fopen("txts/main.txt", "w");
-        if (tableOfNames != NULL) {
-            char string[35] = "TablesQnt: 0\n==================\n";
-            fwrite(string, sizeof(char), strlen(string), tableOfNames);
-            fclose(tableOfNames);
-        } else {
-            printf("Erro ao criar o arquivo\n");
-        }
-    } else {
-        fclose(tableOfNames);
     }
+    fclose(tableOfNames);
 }
 
 void changeTablesQuantity(int addOrDropValue){
@@ -56,7 +48,7 @@ void changeTablesQuantity(int addOrDropValue){
     fclose(tableOfNames);
 }
 
-int isTableNameInUse(char *tableName, char *content){
+int isnameInUse(char *tableName, char *content){
     char *subString = strtok(content, "\n");
 
     while (subString != NULL){
@@ -105,28 +97,31 @@ void readColumns(FILE *table){
     char colType[MAX_COL_TYPE];
     char colName[MAX_COL_NAME];
     int counter = 0;
-
+    printf("Digite respectivamente o tipo e nome da coluna:\n");
+    printf("E stop para finalizar a leitura\n");
     while (true) {
-        printf("Digite o tipo da coluna (stop para parar):");
         scanf("%s", colType);
 
         if (strcmp("stop", colType) == 0) {
+            fprintf(table, "=========================\n");
+            fprintf(table, "ColsQnt: %d\n", counter);
+            fprintf(table, "RowsQnt: 0\n");
+            fprintf(table, "=========================\n");
             break;
         }
-
-        printf("Digite o nome da coluna:");
         scanf("%s", colName);
-
+        
         if (typeAllowed(colType)) {
             char content[100];
             readTableContent(table, content, sizeof(content));
-            if (isTableNameInUse(colName, content)) {
+
+            if (isnameInUse(colName, content)){    
                 printf("Nome de coluna já em uso\n");
             } else {
                 // addColumnToFile(table, colType, colName);
                 fprintf(table, "%s - %s\n", colType, colName);
+                counter++;
             }
-            counter++;
         } else {
             printf("Digite um tipo válido\n");
         }
