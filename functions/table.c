@@ -26,7 +26,7 @@ void createTable() {
     readTableContent(tableOfNames, tableOfNamesContent, sizeof(tableOfNamesContent));
     readTableName(tableName);
 
-    if (isTableNameInUse(tableName, tableOfNamesContent)) {
+    if (isnameInUse(tableName, tableOfNamesContent)) {
         printf("Nome em uso, use outro\n");
     } else {
         int fileNameSize = strlen(tableName) + 10;
@@ -43,7 +43,6 @@ void createTable() {
         }
 
         readColumns(newTable);
-        printf("readdepois\n");
 
         fprintf(tableOfNames, "%s\n", tableName);
 
