@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "../defs.h"
 #include "funcs.h"
 
@@ -42,32 +43,23 @@ void createTable() {
             return;
         }
 
-        readColumns(newTable);
+        readColumns(newTable, fileName);
 
         fprintf(tableOfNames, "%s\n", tableName);
 
         fclose(newTable);
+        free(fileName);
     }
 
-    //adicionar o nome no tableNamesFile
-    //caso não exista entrar no loop de declaração de atributos
-        //criar o arquivo daquela tabela
-        //verificar se o tipo é válido
-        //verificar se o nome já existe
-
-
-    // while(strcmp("stop", attribute)){
-    //     //ler nome do atributo
-    // }
-    
-    //verificar se já existe tabela com esse nome
-
-
+    fclose(tableOfNames);
 }
 
-void listTables(FILE *tableNamesFile){
-    tableNamesFile = fopen("txts/tableNames.txt", "r");
+void listTables(){
+    //ajeitar, ignorar nova primeiras linhas
+    FILE *tableNamesFile = fopen("txts/main.txt", "r");
     char text[100];
+
+    printf("Tabelas existentes:\n");
 
     while(fgets(text, 100, tableNamesFile) != NULL){
         printf("%s", text);
@@ -93,11 +85,27 @@ void deleteLine(char tableName[15]){
     listDataFromTable();
 }
 
-void dropTable(char tableName[15]){
-    //apagar .txt
+void dropTable(){
+    char tableName[15];
+    char fileName[25];
+
+    printf("Digite a tabela que deseja deletar:\n");
+    scanf(" %[^\n]", tableName);
+
+    //if (nome existe no nameOfTables) then (oq tem aqui embaixo ) else (tabela não existe)
+
+    sprintf(fileName, "txts/%s.txt", tableName);
+
+    if(remove(fileName) == 0){
+        printf("Tabela deletada\n");
+    } else {
+        printf("Erro ao deletar a tabela");
+    }
+
 }
 
-void addData(char tableName[15]){
+void addData(){
+    char tableName[15];
     
     listDataFromTable();
     //verificar se a pk já existe

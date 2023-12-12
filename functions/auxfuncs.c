@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "funcs.h"
 
 #define MAX_TABLE_NAME 20
@@ -27,25 +28,43 @@ void initMainTable() {
     fclose(tableOfNames);
 }
 
-void changeTablesQuantity(int addOrDropValue){
-    FILE *tableOfNames;
-    tableOfNames = fopen("txts/main.txt", "r");
+void changeColRowQuantity(char fileName[25], int addOrDropValue, char colOrRow[4]){
+    FILE *table;
+    table = fopen(fileName, "r");
 
-    tableCheckError(tableOfNames);
+    tableCheckError(table);
+    
+    char line[MAX_NAMES_CONTENT];
+    fgets(line, sizeof(line), table);
 
-    char line[15];
-    fgets(line, sizeof(line), tableOfNames);
+    int current, newQnt;
 
-    int current, newTablesQnt;
-    if(sscanf(line, "Qnt: %d", &current) != 1){
-        printf("Erro ao ler a quantidade de tabelas\n");
-        return;
+    if (strcmp(colOrRow, "row") == 0) {
+        if (sscanf(line, "RowsQnt: %d", &current) != 1) {
+            printf("Erro ao ler a quantidade de linhas\n");
+            return;
+        }
+        newQnt = addOrDropValue + current;
+
+        fseek(table, 0, SEEK_SET);
+        fprintf(table, "RowsQnt: %d\n", newQnt);
+    } else if (strcmp(colOrRow, "col") == 0) {
+    // Avança para a próxima linha que contém "ColsQnt:"
+        while (fgets(line, sizeof(line), table) != NULL && strncmp(line, "ColsQnt:", 8) != 0) {
+            // Não faz nada enquanto não encontra a linha correta
+        }
+
+        if (sscanf(line, "ColsQnt: %d", &current) != 1) {
+            printf("Erro ao ler a quantidade de colunas\n");
+            return;
+        }
+
+        newQnt = addOrDropValue + current;
+
+        fseek(table, -strlen(line), SEEK_CUR); // Retrocede para o início da linha "ColsQnt:"
+        fprintf(table, "ColsQnt: %d", newQnt);
     }
-    newTablesQnt = addOrDropValue + current;
-
-    fseek(tableOfNames, 0, SEEK_SET);
-    fprintf(tableOfNames, "TablesQnt: %d\n", newTablesQnt);
-    fclose(tableOfNames);
+    fclose(table);
 }
 
 int isnameInUse(char *tableName, char *content){
@@ -62,15 +81,68 @@ int isnameInUse(char *tableName, char *content){
     return 0;
 }
 
-int tableCheckError(FILE *tableName){
-    if(tableName == NULL){
-        perror("Erro ao abrir o arquivo de nomes de tabela");
-        fclose(tableName);
-        return 1;
+bool typeAllowed(char *maybeType){
+    char allowedTypes[5][8] = {"int", "float", "double", "char", "string"};
+
+    for(int i = 0; i < 5; i++){
+        if(strcasecmp(maybeType, allowedTypes[i]) == 0){
+            return true;
+        }
     }
-    return 0;
+    return false;
 }
 
-bool verifyTableExistence(char *tableName){
+void readTableName(char *tableName){
+    printf("Digite o nome da tabela:");
+    scanf(" %[^\n]", tableName);
+}
 
+void readTableContent(FILE *table, char *tableContent, int maxSize){
+    int bytesRead = fread(tableContent, sizeof(char), maxSize - 1, table);
+    tableContent[bytesRead] = '\0';
+}
+
+void addColumnToFile(FILE *table, char *colType, char *colName){
+    char format[MAX_COL_NAME + MAX_COL_TYPE + 5]; // 5 = strlen(" - \n") + 1 (null terminator)
+    snprintf(format, sizeof(format), "%s - %s\n", colType, colName);
+    if (table != NULL) {
+        fwrite(format, sizeof(char), strlen(format), table);
+    } else {
+        printf("Erro ao abrir o arquivo (addColumnToFile)\n");
+    }
+}
+
+void readColumns(FILE *table){
+    char colType[MAX_COL_TYPE];
+    char colName[MAX_COL_NAME];
+    int counter = 0;
+    printf("Digite respectivamente o tipo e nome da coluna:\n");
+    printf("E stop para finalizar a leitura\n");
+    while (true) {
+        scanf("%s", colType);
+
+        if (strcmp("stop", colType) == 0) {
+            fprintf(table, "=========================\n");
+            fprintf(table, "ColsQnt: %d\n", counter);
+            fprintf(table, "RowsQnt: 0\n");
+            fprintf(table, "=========================\n");
+            break;
+        }
+        scanf("%s", colName);
+        
+        if (typeAllowed(colType)) {
+            char content[100];
+            readTableContent(table, content, sizeof(content));
+
+            if (isnameInUse(colName, content)){    
+                printf("Nome de coluna já em uso\n");
+            } else {
+                // addColumnToFile(table, colType, colName);
+                fprintf(table, "%s - %s\n", colType, colName);
+                counter++;
+            }
+        } else {
+            printf("Digite um tipo válido\n");
+        }
+    }
 }
