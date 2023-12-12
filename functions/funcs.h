@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 #ifndef FUNCS
 #define FUNCS
 
