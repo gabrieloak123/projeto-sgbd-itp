@@ -1,2 +1,3 @@
-[] ajeitar o uso do isNameInUse no createTable, tá permitindo repetir nome de coluna
+[] ajeitar verificação de nome de coluna no readCollumn
 [] ajeitar o changeColOrRow, ele não tá conseguindo pegar o número atual de colunas pra iterar
+[] escrever a pk no cabeçalho
