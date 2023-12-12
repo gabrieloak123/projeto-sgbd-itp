@@ -5,15 +5,15 @@
 #include "../defs.h"
 #include "funcs.h"
 
-#define MAX_TABLE_NAME 20
+/*#define MAX_TABLE_NAME 20
 #define MAX_NAMES_CONTENT 100
 #define MAX_COL_TYPE 10
 #define MAX_COL_NAME 25
-#define MAX_FILE_NAME 25
+#define MAX_FILE_NAME 25*/
 
 void createTable() {
     char tableName[MAX_TABLE_NAME];
-    char tableOfNamesContent[MAX_NAMES_CONTENT];
+    char tableOfNamesContent[MAX_TABLE_NAME];
     FILE *tableOfNames;
 
     tableOfNames = fopen("txts/main.txt", "r+");
