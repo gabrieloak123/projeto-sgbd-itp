@@ -5,48 +5,50 @@
 #include "./functions/funcs.h"
 
 int main(){
-    FILE *tableOfNames;
-    //char *stringTeste = "hello\nworld\nhelloworld\n";
-
-    tableOfNames = fopen("txts/tableNames.txt", "w");
-    //fwrite(stringTeste, sizeof(char), strlen(stringTeste), tableOfNames);
-    fclose(tableOfNames);
-
-    //lembrar de usar o system("clear")
-
     int choice;
     bool shouldContinue = true;
-
+    
+    initMainTable();
+    
     while(shouldContinue){
         showMenu();
         scanf("%d", &choice);
         
         switch (choice){
         case 0:
+            system("clear");
             shouldContinue = false;
             break;
         case 1:
+            system("clear");
             createTable();
             break;
         case 2:
-            listTables(tableOfNames);
+            system("clear");
+            listTables();
             break;
         case 3:
+            system("clear");
             addData();
             break;
         case 4:
+            system("clear");
             listDataFromTable();
             break;
         case 5:
+            system("clear");
             searchData();
             break;
         case 6:
+            system("clear");
             deleteLine();
             break;
         case 7:
+            system("clear");
             dropTable();
             break;
         default:
+            system("clear");
             printf("Opção inválida, digite novamente:\n");
             break;
         }
