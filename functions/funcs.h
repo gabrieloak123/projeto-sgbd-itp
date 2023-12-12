@@ -26,4 +26,10 @@ void readTableContent(FILE *table, char *tableContent, int maxSize);
 void readColumns(FILE *newTable);
 void addColumnToFile(FILE *table, char *colType, char *colName);
 
+// file Op functions
+void readMain();
+void writeMain();
+void readTable();
+void writeTable();
+
 #endif
