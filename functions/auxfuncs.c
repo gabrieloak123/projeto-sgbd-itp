@@ -67,18 +67,33 @@ void changeColRowQuantity(char fileName[25], int addOrDropValue, char colOrRow[4
     fclose(table);
 }
 
-int isnameInUse(char *tableName, char *content){
-    char *subString = strtok(content, "\n");
-
-    while (subString != NULL){
-        char *nameInUse = strstr(subString, tableName);
-
-        if(nameInUse != NULL){
-            return 1;
-        }
-        subString = strtok(NULL, "\n");
+bool isnameInUse(char *fileName, char *targetWord){
+    FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        perror("Erro ao abrir o arquivo");
+        return false;
     }
-    return 0;
+
+    char line[100];
+
+    while (fgets(line, sizeof(line), file) != NULL) {
+        // Remove o caractere de nova linha, se existir
+        line[strcspn(line, "\n")] = '\0';
+
+        // Usa strtok para dividir a linha em palavras separadas por espaços
+        char *token = strtok(line, " ");
+        while (token != NULL) {
+            // Compara a palavra com cada palavra na linha
+            if (strcmp(token, targetWord) == 0) {
+                fclose(file);
+                return true;
+            }
+            token = strtok(NULL, " ");
+        }
+    }
+
+    fclose(file);
+    return false;
 }
 
 bool typeAllowed(char *maybeType){
@@ -142,8 +157,13 @@ void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
                 }
             }
             do{
+                printf("(Repetirá até digitar um dos argumentos acima)\n");
                 scanf(" %[^\n]", primaryKey);
-            } while(isnameInUse(fileName, primaryKey) == false);
+
+                if (isnameInUse(fileName, primaryKey)) {
+                    break;  // Saia do loop se a chave primária não estiver em uso
+                }
+            } while(true);
             break;
         }
         scanf("%s", colName);
@@ -156,7 +176,7 @@ void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
                 printf("Nome de coluna já em uso\n");
             } else {
                 colNamesArray = realloc(colNamesArray, (counter + 1) * sizeof(char *));
-                 colNamesArray[counter] = strdup(colName);
+                colNamesArray[counter] = strdup(colName);
                 // addColumnToFile(table, colType, colName);
                 fprintf(table, "%s - %s\n", colType, colName);
                 counter++;
@@ -166,8 +186,8 @@ void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
         }
 
     }
-    changeColRowQuantity(fileName, counter, "col");
-
+    //changeColRowQuantity(fileName, counter, "col");
+    
     for (int i = 0; i < counter; i++) {
         free(colNamesArray[i]);
     }

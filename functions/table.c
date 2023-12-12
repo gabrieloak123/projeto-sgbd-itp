@@ -27,7 +27,7 @@ void createTable() {
     readTableContent(tableOfNames, tableOfNamesContent, sizeof(tableOfNamesContent));
     readTableName(tableName);
 
-    if (isnameInUse(tableName, tableOfNamesContent)) {
+    if (isnameInUse("txts/main.txt", tableName)){
         printf("Nome em uso, use outro\n");
     } else {
         int fileNameSize = strlen(tableName) + 10;
