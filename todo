@@ -1,3 +1,4 @@
 [] ajeitar verificação de nome de coluna no readCollumn
 [] ajeitar o changeColOrRow, ele não tá conseguindo pegar o número atual de colunas pra iterar
 [] escrever a pk no cabeçalho
+[] verificar porque a solicitação da pk tá tirando a última linha da tabela
