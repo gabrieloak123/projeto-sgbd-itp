@@ -7,6 +7,7 @@ add_library(my_library SHARED
     ./functions/menu.c
     ./functions/table.c
     ./functions/auxfuncs.c
+    ./functions/fileOp.c
 )
 
 add_executable(main main.c)
