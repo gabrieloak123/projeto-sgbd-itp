@@ -36,25 +36,54 @@ void createTable() {
 }
 
 void listTables(){
-    //ajeitar, ignorar nova primeiras linhas
-    FILE *tableNamesFile = fopen("txts/main.txt", "r");
-    char text[100];
-
-    while(fgets(text, 100, tableNamesFile) != NULL){
-        if(strstr(text, "==================") != NULL){
-            break;
-        }
-        printf("%s", text);
+    readMain();     // Eu acho que é melhor a gente não chamar essa função dentro de outras, mas sim na main
+    for(int i = 0; i < numTables; i++){
+        printf("%s\n", tableNames[i]);
     }
-
-    fclose(tableNamesFile);
 }
 
 void listDataFromTable(){
-    char tableName[15];
+    char tableName[MAX_TABLE_NAME];
+    Table readingTable;
 
-    //importar do txt
-    //printar
+    printf("Digite o nome da tabela:\n");
+    scanf(" %[^\n]", tableName);
+
+    readTable(&readingTable, tableName);
+
+    printf("Tabela: %s\n", tableName);
+    for(int i = 0; i < readingTable.numColumns; i++){
+        printf("%-15s", readingTable.columns[i].name);
+    }
+    printf("\n");
+
+    for(int i = 0; i < readingTable.numColumns; i++){
+        for(int j = 0; j < 15; j++) printf("-");
+    }
+    printf("\n");
+
+    for(int i = 0; i < readingTable.numRows; i++){
+        for(int j = 0; j < readingTable.numColumns; j++){
+            switch(readingTable.columns[j].type){
+                case INT:
+                    printf("%-15d", readingTable.columns[j].Data.intData[i]);
+                    break;
+                case FLOAT:
+                    printf("%-15.2f", readingTable.columns[j].Data.floatData[i]);
+                    break;
+                case DOUBLE:
+                    printf("%-15.2lf", readingTable.columns[j].Data.doubleData[i]);
+                    break;
+                case CHAR:
+                    printf("%-15c", readingTable.columns[j].Data.charData[i]);
+                    break;
+                case STRING:
+                    printf("%-15s", readingTable.columns[j].Data.stringData[i]);
+                    break;
+            }
+        }
+        printf("\n");
+    }
 }
 
 void deleteLine(){
