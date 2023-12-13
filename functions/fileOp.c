@@ -9,7 +9,8 @@
 #include <string.h>
 #include <ctype.h>
 
-char TableNames[MAX_TABLE_NAME][MAX_NUM_TABLES];
+char tableNames[MAX_TABLE_NAME][MAX_NUM_TABLES];
+int numTables = 0;
 
 Type stringToType(char *type) {
     if (strcmp(type, "INT") == 0) {
@@ -27,13 +28,32 @@ Type stringToType(char *type) {
 }
 
 void readMain() {
-    FILE *file = fopen("main.txt", "r");
+    FILE *file = fopen("txts/main.txt", "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo main.txt\n");
+        return;
+    }
     char tableName[MAX_TABLE_NAME];
     int i = 0;
 
     while (fscanf(file, "%s", tableName) != EOF) {
-        strcpy(TableNames[i], tableName);
+        strcpy(tableNames[i], tableName);
         i++;
+    }
+    numTables = i;
+
+    fclose(file);
+}
+
+void writeMain() {
+    FILE *file = fopen("txts/main.txt", "w");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo main.txt\n");
+        return;
+    }
+
+    for (int i = 0; i < numTables; i++) {
+        fprintf(file, "%s\n", tableNames[i]);
     }
 
     fclose(file);
@@ -41,7 +61,7 @@ void readMain() {
 
 void readTable(Table *table, char *tableName) {
     char filename[MAX_TABLE_NAME + 4];
-    sprintf(filename, "%s.txt", tableName);
+    sprintf(filename, "txts/%s.txt", tableName);
 
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -125,4 +145,83 @@ void readTable(Table *table, char *tableName) {
             token = strtok(NULL, ",");
         }
     }
+}
+
+void writeTable(Table *table, char *tableName) {
+    char filename[MAX_TABLE_NAME + 4];
+    sprintf(filename, "txts/%s.txt", tableName);
+
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo %s\n", filename);
+        return;
+    }
+
+    // Escreve o cabeçalho
+    fprintf(file, "Número de Colunas: %d\n", table->numColumns);
+    fprintf(file, "Número de Registros: %d\n", table->numRows);
+    fprintf(file, "Chave Primária: %d\n", table->primaryKeyIndex);
+
+    // Escreve os nomes das colunas
+    for (int i = 0; i < table->numColumns; i++) {
+        fprintf(file, "%s", table->columns[i].name);
+        if (i < table->numColumns - 1) {
+            fprintf(file, ", ");
+        }
+    }
+    fprintf(file, "\n");
+
+    // Escreve os tipos das colunas
+    for (int i = 0; i < table->numColumns; i++) {
+        switch (table->columns[i].type) {
+            case INT:
+                fprintf(file, "INT");
+                break;
+            case FLOAT:
+                fprintf(file, "FLOAT");
+                break;
+            case DOUBLE:
+                fprintf(file, "DOUBLE");
+                break;
+            case CHAR:
+                fprintf(file, "CHAR");
+                break;
+            case STRING:
+                fprintf(file, "STRING");
+                break;
+        }
+        if (i < table->numColumns - 1) {
+            fprintf(file, ", ");
+        }
+    }
+    fprintf(file, "\n");
+
+    // Escreve os dados
+    for (int i = 0; i < table->numRows; i++) {
+        for (int j = 0; j < table->numColumns; j++) {
+            switch (table->columns[j].type) {
+                case INT:
+                    fprintf(file, "%d", table->columns[j].Data.intData[i]);
+                    break;
+                case FLOAT:
+                    fprintf(file, "%f", table->columns[j].Data.floatData[i]);
+                    break;
+                case DOUBLE:
+                    fprintf(file, "%lf", table->columns[j].Data.doubleData[i]);
+                    break;
+                case CHAR:
+                    fprintf(file, "%c", table->columns[j].Data.charData[i]);
+                    break;
+                case STRING:
+                    fprintf(file, "%s", table->columns[j].Data.stringData[i]);
+                    break;
+            }
+            if (j < table->numColumns - 1) {
+                fprintf(file, ", ");
+            }
+        }
+        fprintf(file, "\n");
+    }
+
+    fclose(file);
 }

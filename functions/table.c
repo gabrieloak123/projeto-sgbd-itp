@@ -11,46 +11,28 @@
 #define MAX_COL_NAME 25
 #define MAX_FILE_NAME 25*/
 
+extern char tableNames[MAX_TABLE_NAME][MAX_NUM_TABLES];
+extern int numTables;
+
 void createTable() {
     char tableName[MAX_TABLE_NAME];
-    char tableOfNamesContent[MAX_TABLE_NAME];
-    FILE *tableOfNames;
+    Table newTable;
+    newTable.numColumns = 0;
+    newTable.numRows = 0;
+    readMain();
 
-    tableOfNames = fopen("txts/main.txt", "r+");
-
-    //verifica se o arquivo existe
-    if (tableCheckError(tableOfNames)) {
-        return;
+    printf("Digite o nome da tabela:\n");
+    scanf(" %[^\n]", tableName);
+    while (isTableNameInUse(tableName) == 1){
+        printf("Nome já em uso, digite outro:\n");
+        scanf(" %[^\n]", tableName);
     }
 
-    readTableContent(tableOfNames, tableOfNamesContent, sizeof(tableOfNamesContent));
-    readTableName(tableName);
-
-    if (isnameInUse(tableName, tableOfNamesContent)) {
-        printf("Nome em uso, use outro\n");
-    } else {
-        int fileNameSize = strlen(tableName) + 10;
-        char *fileName = malloc(fileNameSize);
-        FILE *newTable;
-
-        snprintf(fileName, fileNameSize, "txts/%s.txt", tableName);
-        newTable = fopen(fileName, "w");
-
-        if (newTable == NULL) {
-            printf("Erro ao criar a tabela\n");
-            free(fileName);
-            return;
-        }
-
-        readColumns(newTable);
-
-        fprintf(tableOfNames, "%s\n", tableName);
-
-        fclose(newTable);
-        free(fileName);
-    }
-
-    fclose(tableOfNames);
+    strcpy(tableNames[numTables], tableName);
+    numTables++;
+    readColumns(&newTable);
+    writeMain();
+    writeTable(&newTable, tableName);
 }
 
 void listTables(){

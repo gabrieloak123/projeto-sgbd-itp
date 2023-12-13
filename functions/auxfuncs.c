@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include "../defs.h"
 #include "funcs.h"
 
-#define MAX_TABLE_NAME 20
+/*#define MAX_TABLE_NAME 20
 #define MAX_NAMES_CONTENT 100
 #define MAX_COL_TYPE 10
 #define MAX_COL_NAME 25
-#define MAX_FILE_NAME 25
+#define MAX_FILE_NAME 25*/
+
+extern char tableNames[MAX_TABLE_NAME][MAX_NUM_TABLES];
+extern int numTables;
 
 int tableCheckError(FILE *tableName){
     if(tableName == NULL){
@@ -48,16 +52,21 @@ void changeTablesQuantity(int addOrDropValue){
     fclose(tableOfNames);
 }
 
-int isnameInUse(char *tableName, char *content){
-    char *subString = strtok(content, "\n");
-
-    while (subString != NULL){
-        char *nameInUse = strstr(subString, tableName);
-
-        if(nameInUse != NULL){
+// Generalizar essa e a próxima
+int isTableNameInUse(char *tableName){
+    for(int i = 0; i < numTables; i++){
+        if(strcmp(tableNames[i], tableName) == 0){
             return 1;
         }
-        subString = strtok(NULL, "\n");
+    }
+    return 0;
+}
+
+int isColumnNameInUse(char *columnName, Table *table){
+    for(int i = 0; i < table->numColumns; i++){
+        if(strcmp(table->columns[i].name, columnName) == 0){
+            return 1;
+        }
     }
     return 0;
 }
@@ -73,6 +82,7 @@ bool typeAllowed(char *maybeType){
     return false;
 }
 
+/*
 void readTableName(char *tableName){
     printf("Digite o nome da tabela:");
     scanf(" %[^\n]", tableName);
@@ -84,44 +94,62 @@ void readTableContent(FILE *table, char *tableContent, int maxSize){
 }
 
 void addColumnToFile(FILE *table, char *colType, char *colName){
-    char format[MAX_COL_NAME + MAX_COL_TYPE + 5]; // 5 = strlen(" - \n") + 1 (null terminator)
+    char format[MAX_COLUMN_NAME + MAX_COLUMN_TYPE + 5]; // 5 = strlen(" - \n") + 1 (null terminator)
     snprintf(format, sizeof(format), "%s - %s\n", colType, colName);
     if (table != NULL) {
         fwrite(format, sizeof(char), strlen(format), table);
     } else {
         printf("Erro ao abrir o arquivo (addColumnToFile)\n");
     }
-}
+} */
 
-void readColumns(FILE *table){
-    char colType[MAX_COL_TYPE];
-    char colName[MAX_COL_NAME];
+void readColumns(Table *table){
+    char colType[MAX_COLUMN_TYPE];
+    char colName[MAX_COLUMN_NAME];
     int counter = 0;
     printf("Digite respectivamente o tipo e nome da coluna:\n");
     printf("E stop para finalizar a leitura\n");
     while (true) {
         scanf("%s", colType);
 
-        if (strcmp("stop", colType) == 0) {
-            fprintf(table, "=========================\n");
-            fprintf(table, "ColsQnt: %d\n", counter);
-            fprintf(table, "RowsQnt: 0\n");
-            fprintf(table, "=========================\n");
-            break;
+        if (strcasecmp(colType, "stop") == 0 && counter > 1) {
+            printf("Digite qual dos atributos será a Chave primária:\n");
+            for (int i = 0; i < counter; i++) {
+                printf("%d - %s\n", i, table->columns[i].name);
+            }
+            scanf("%d", &(table->primaryKeyIndex));
+            while (table->primaryKeyIndex >= counter || table->primaryKeyIndex < 0) {
+                printf("Digite um número válido\n");
+                scanf("%d", &(table->primaryKeyIndex));
+            }
+
+            return;
+        } else if (strcasecmp(colType, "stop") == 0) {
+            table->primaryKeyIndex = 0;
+            return;
         }
         scanf("%s", colName);
-        
-        if (typeAllowed(colType)) {
-            char content[100];
-            readTableContent(table, content, sizeof(content));
 
-            if (isnameInUse(colName, content)){    
-                printf("Nome de coluna já em uso\n");
-            } else {
-                // addColumnToFile(table, colType, colName);
-                fprintf(table, "%s - %s\n", colType, colName);
-                counter++;
+        while (isColumnNameInUse(colName, table) == 1){
+            printf("Nome de coluna em uso, digite outro:\n");
+            scanf(" %[^\n]", colName);
+        }
+
+        if (typeAllowed(colType)) {
+            strcpy(table->columns[counter].name, colName);
+            if (strcasecmp(colType, "int") == 0) {
+                table->columns[counter].type = INT;
+            } else if (strcasecmp(colType, "float") == 0) {
+                table->columns[counter].type = FLOAT;
+            } else if (strcasecmp(colType, "double") == 0) {
+                table->columns[counter].type = DOUBLE;
+            } else if (strcasecmp(colType, "char") == 0) {
+                table->columns[counter].type = CHAR;
+            } else if (strcasecmp(colType, "string") == 0) {
+                table->columns[counter].type = STRING;
             }
+            counter++;
+            table->numColumns = counter;
         } else {
             printf("Digite um tipo válido\n");
         }

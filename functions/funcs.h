@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include "../defs.h"
 #ifndef FUNCS
 #define FUNCS
 
@@ -19,12 +20,12 @@ void searchData();
 //auxiliar functions
 void showMenu();
 bool typeAllowed(char *maybeType);
-int isnameInUse(char *tableName, char *content);
+int isTableNameInUse(char *tableName);
 int tableCheckError(FILE *tableName);
 void readTableName(char *tableName);
 void changeTablesQuantity(int addOrDropValue);
 void readTableContent(FILE *table, char *tableContent, int maxSize);
-void readColumns(FILE *newTable);
+void readColumns(Table *Table);
 void addColumnToFile(FILE *table, char *colType, char *colName);
 
 // file Op functions
