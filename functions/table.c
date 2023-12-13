@@ -104,15 +104,31 @@ void addData() {
 
 void deleteLine(){
     char tableName[MAX_TABLE_NAME];
-    char pk[MAX_COLUMN_NAME];
+    int primaryKey;
+    int *primaryKeyIndex;
+    Table table;
 
     printf("Digite a tabela que deseja deletar dados:\n");
     scanf(" %[^\n]", tableName);
+    readTable(&table, tableName);
 
+    printf("A tabela altualmente está assim:\n");
     listDataFrom(tableName);
     
+    printf("Digite a Chave Primária referente à linha que será deletada:\n");
+    printf("(Repetirá até ser digitada uma válida)\n");
+
+    //verifica se o valor de pk está na tabela
+    do{
+        scanf("%d", &primaryKey);
+    } while(validPrimaryKeyValue(table,primaryKey, &primaryKeyIndex) != true);
+    
+    for(int i = 0; i < table.numColumns; i++){
+        
+    }
+
     //apagar linha no txt
-    listDataFromTable();
+    listDataFrom(tableName);
 }
 
 void dropTable(){
