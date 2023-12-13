@@ -152,7 +152,7 @@ void addData(){
     listTables();
     printf("=========================================\n");
     do{
-        printf("Digite o nome de uma tabela acima adicionar dados:\n")
+        printf("Digite o nome de uma tabela acima adicionar dados:\n");
         scanf(" %[^\n]", tableName);
     } while(!isnameInUse("txts/main.txt", tableName));
     
