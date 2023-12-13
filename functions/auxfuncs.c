@@ -106,16 +106,21 @@ void addColumnToFile(FILE *table, char *colType, char *colName){
 void readColumns(Table *table){
     char colType[MAX_COLUMN_TYPE];
     char colName[MAX_COLUMN_NAME];
-    int counter = 0;
+    int counter = 0, columnsIndex = 0;
     printf("Digite respectivamente o tipo e nome da coluna:\n");
     printf("E stop para finalizar a leitura\n");
     while (true) {
         scanf("%s", colType);
 
+        // O que tu acha de colocar como obrigatório pelo menos uma coluna do tipo int?
+
         if (strcasecmp(colType, "stop") == 0 && counter > 1) {
             printf("Digite qual dos atributos será a Chave primária:\n");
             for (int i = 0; i < counter; i++) {
-                printf("%d - %s\n", i, table->columns[i].name);
+                if (table->columns[i].type == INT) {
+                    columnsIndex++;
+                    printf("%d - %s\n", columnsIndex, table->columns[i].name);
+                }
             }
             scanf("%d", &(table->primaryKeyIndex));
             while (table->primaryKeyIndex >= counter || table->primaryKeyIndex < 0) {
@@ -153,5 +158,20 @@ void readColumns(Table *table){
         } else {
             printf("Digite um tipo válido\n");
         }
+    }
+}
+
+char *dataTypeToString(Type type) {
+    switch (type) {
+        case INT:
+            return "int";
+        case FLOAT:
+            return "float";
+        case DOUBLE:
+            return "double";
+        case CHAR:
+            return "char";
+        case STRING:
+            return "string";
     }
 }
