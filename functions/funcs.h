@@ -28,6 +28,7 @@ void readTableContent(FILE *table, char *tableContent, int maxSize);
 void readColumns(Table *Table);
 void addColumnToFile(FILE *table, char *colType, char *colName);
 void listDataFrom(char tableName[MAX_TABLE_NAME]);
+char *dataTypeToString(Type type);
 
 // file Op functions
 void readMain();

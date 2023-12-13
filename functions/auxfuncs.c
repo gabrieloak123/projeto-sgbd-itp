@@ -138,58 +138,31 @@ void addColumnToFile(FILE *table, char *colType, char *colName){
     }
 }
 
-void updatePrimaryKey(char *fileName, char *newPrimaryKey){
-    FILE *file = fopen(fileName, "r+");  // Abre o arquivo para leitura e escrita
-
-    if (file == NULL) {
-        perror("Erro ao abrir o arquivo");
-        exit(EXIT_FAILURE);
-    }
-
-    char line[100];
-    long primaryKeyStartPosition = -1;
-
-    // Procura pela linha que começa com "PrimaryKey:"
-    while (fgets(line, sizeof(line), file) != NULL) {
-        if (strncmp(line, "PrimaryKey:", strlen("PrimaryKey:")) == 0) {
-            primaryKeyStartPosition = ftell(file);
-            break;
-        }
-    }
-
-    if (primaryKeyStartPosition != -1) {
-        // Posiciona o cursor no início do campo PrimaryKey
-        fseek(file, primaryKeyStartPosition - 1, SEEK_SET);
-
-        // Escreve a nova chave primária no arquivo
-        fprintf(file, "%s\n", newPrimaryKey);
-    } else {
-        printf("Campo PrimaryKey não encontrado no arquivo.\n");
-    }
-
-    fclose(file);
-}
-
-void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
-    char colType[MAX_COL_TYPE];
-    char colName[MAX_COL_NAME];
-    char primaryKey[MAX_COL_NAME];
-    int counter = 0;
-    char colNamesArray[100][100];
-
-    fprintf(table, "ColsQnt: 0\n");
-    fprintf(table, "RowsQnt: 0\n");
-    fprintf(table, "PrimaryKey: \n");
-    fprintf(table, "=========================================\n");
-
+void readColumns(Table *table){
+    char colType[MAX_COLUMN_TYPE];
+    char colName[MAX_COLUMN_NAME];
+    int counter = 0, columnsIndex = 0;
     printf("Digite respectivamente o tipo e nome da coluna:\n");
     printf("E stop para finalizar a leitura\n");
 
     while (true) {
         scanf("%s", colType);
 
-        if (strcmp("stop", colType) == 0) {
-            fprintf(table, "=========================================\n");
+        // O que tu acha de colocar como obrigatório pelo menos uma coluna do tipo int?
+
+        if (strcasecmp(colType, "stop") == 0 && counter > 1) {
+            printf("Digite qual dos atributos será a Chave primária:\n");
+            for (int i = 0; i < counter; i++) {
+                if (table->columns[i].type == INT) {
+                    columnsIndex++;
+                    printf("%d - %s\n", columnsIndex, table->columns[i].name);
+                }
+            }
+            scanf("%d", &(table->primaryKeyIndex));
+            while (table->primaryKeyIndex >= counter || table->primaryKeyIndex < 0) {
+                printf("Digite um número válido\n");
+                scanf("%d", &(table->primaryKeyIndex));
+            }
 
             printf("Digite qual dos atributos será a Chave Primária:\n");
             for(int i = 0; i < counter; i++){
@@ -277,5 +250,20 @@ void listDataFrom(char tableName[MAX_TABLE_NAME]){
             }
         }
         printf("\n");
+    }
+}
+
+char *dataTypeToString(Type type) {
+    switch (type) {
+        case INT:
+            return "int";
+        case FLOAT:
+            return "float";
+        case DOUBLE:
+            return "double";
+        case CHAR:
+            return "char";
+        case STRING:
+            return "string";
     }
 }

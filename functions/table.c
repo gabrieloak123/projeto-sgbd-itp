@@ -51,6 +51,57 @@ void listDataFromTable(){
     listDataFrom(tableName);
 }
 
+void addData() {
+    char tableName[MAX_TABLE_NAME];
+    Table table;
+
+    printf("Digite o nome da tabela:\n");
+    scanf(" %[^\n]", tableName);
+
+    readTable(&table, tableName);
+
+    for (int i = 0; i < table.numColumns; i++) {
+        printf("Digite o valor da coluna %s (%s):\n", table.columns[i].name, dataTypeToString(table.columns[i].type));
+        char value[MAX_STRING_SIZE];
+        scanf(" %[^\n]", value);
+
+        while (strlen(value) > MAX_STRING_SIZE || strlen(value) == 0) {
+            printf("Valor muito grande ou vazio, digite novamente:\n");
+            scanf(" %[^\n]", value);
+        }
+
+        switch (table.columns[i].type) {
+            case INT:
+                table.columns[i].Data.intData[table.numRows] = atoi(value);
+                break;
+            case FLOAT:
+                table.columns[i].Data.floatData[table.numRows] = atof(value);
+                break;
+            case DOUBLE:
+                table.columns[i].Data.doubleData[table.numRows] = atof(value);
+                break;
+            case CHAR:
+                table.columns[i].Data.charData[table.numRows] = value[0];
+                break;
+            case STRING:
+                strcpy(table.columns[i].Data.stringData[table.numRows], value);
+                break;
+        }
+    }
+
+    for (int i = 0; i < table.numRows; i++) {
+        if (table.columns[table.primaryKeyIndex].Data.intData[i] == table.columns[table.primaryKeyIndex].Data.intData[table.numRows]
+            || table.columns[table.primaryKeyIndex].Data.intData[table.numRows] < 0) {
+            printf("Chave primária já existente, digite novamente:\n");
+            return;
+        }
+    }
+
+    table.numRows++;
+
+    writeTable(&table, tableName);
+}
+
 void deleteLine(){
     char tableName[MAX_TABLE_NAME];
     char pk[MAX_COLUMN_NAME];
@@ -81,14 +132,6 @@ void dropTable(){
         printf("Erro ao deletar a tabela");
     }
 
-}
-
-void addData(){
-    char tableName[15];
-    
-    listDataFromTable();
-    //verificar se a pk já existe
-    //atualizar txt
 }
 
 void searchData(){
