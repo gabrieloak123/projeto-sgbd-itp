@@ -27,6 +27,7 @@ void changeTablesQuantity(int addOrDropValue);
 void readTableContent(FILE *table, char *tableContent, int maxSize);
 void readColumns(Table *Table);
 void addColumnToFile(FILE *table, char *colType, char *colName);
+char *dataTypeToString(Type type);
 
 // file Op functions
 void readMain();
