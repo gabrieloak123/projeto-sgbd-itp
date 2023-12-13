@@ -63,9 +63,6 @@ void listTables(){
     printf("Tabelas existentes:\n");
 
     while(fgets(text, 100, tableNamesFile) != NULL){
-        if(strstr(text, "==================") != NULL){
-            break;
-        }
         printf("%s", text);
     }
 
@@ -149,11 +146,16 @@ void dropTable() {
     }
 }
 
-
 void addData(){
-    char tableName[15];
+    char tableName[MAX_TABLE_NAME];
+
+    listTables();
+    printf("=========================================\n");
+    do{
+        printf("Digite o nome de uma tabela acima adicionar dados:\n")
+        scanf(" %[^\n]", tableName);
+    } while(!isnameInUse("txts/main.txt", tableName));
     
-    listDataFromTable();
     //verificar se a pk já existe
     //atualizar txt
 }
