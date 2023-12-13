@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "../defs.h"
 #include "funcs.h"
 
@@ -26,7 +27,7 @@ void createTable() {
     readTableContent(tableOfNames, tableOfNamesContent, sizeof(tableOfNamesContent));
     readTableName(tableName);
 
-    if (isnameInUse(tableName, tableOfNamesContent)) {
+    if (isnameInUse("txts/main.txt", tableName)){
         printf("Nome em uso, use outro\n");
     } else {
         int fileNameSize = strlen(tableName) + 10;
@@ -42,7 +43,7 @@ void createTable() {
             return;
         }
 
-        readColumns(newTable);
+        readColumns(newTable, fileName);
 
         fprintf(tableOfNames, "%s\n", tableName);
 
@@ -53,15 +54,15 @@ void createTable() {
     fclose(tableOfNames);
 }
 
+//só lê o arquivo main linha por linha mesmo
 void listTables(){
     //ajeitar, ignorar nova primeiras linhas
     FILE *tableNamesFile = fopen("txts/main.txt", "r");
     char text[100];
 
+    printf("Tabelas existentes:\n");
+
     while(fgets(text, 100, tableNamesFile) != NULL){
-        if(strstr(text, "==================") != NULL){
-            break;
-        }
         printf("%s", text);
     }
 
@@ -85,29 +86,76 @@ void deleteLine(){
     listDataFromTable();
 }
 
-void dropTable(){
+/*verifica se a tabela digitada existe no arquivo main e, caso
+positivo, cria um arquivo temp com todas as tabelas antigas menos
+a indesejada, daí apaga o main antigo e renomeia o temp*/
+void dropTable() {
     char tableName[15];
     char fileName[25];
+    char confirmDrop;
 
+    listTables();
+    printf("\n");
     printf("Digite a tabela que deseja deletar:\n");
     scanf(" %[^\n]", tableName);
 
-    //if (nome existe no nameOfTables) then (oq tem aqui embaixo ) else (tabela não existe)
-
     sprintf(fileName, "txts/%s.txt", tableName);
+    if (access(fileName, F_OK) != -1) {
+        printf("Tem certeza que deseja deletar a tabela %s? (S/N)\n", tableName);
+        scanf(" %c", &confirmDrop);
 
-    if(remove(fileName) == 0){
-        printf("Tabela deletada\n");
+        if (confirmDrop == 'S' || confirmDrop == 's') {
+            if (remove(fileName) == 0) {
+                printf("Tabela deletada\n");
+
+                FILE *tableOfNames, *temp;
+                char buffer[MAX_NAMES_CONTENT];
+                char tableContent[MAX_NAMES_CONTENT];
+                
+                tableOfNames = fopen("txts/main.txt", "r");
+                tableCheckError(tableOfNames);
+
+                temp = fopen("txts/temp.txt", "w");
+                tableCheckError(tableOfNames);
+
+                readTableContent(tableOfNames, tableContent, sizeof(tableContent));
+                
+                char *tableStart = strstr(tableContent, tableName);
+                if (tableStart != NULL) {
+                    char *tableEnd = strchr(tableStart, '\n');
+                    if (tableEnd != NULL) {
+                        // Copiar a parte antes da tabela para o arquivo temporário
+                        fwrite(tableContent, sizeof(char), tableStart - tableContent, temp);
+                        // Copiar a parte após a tabela para o arquivo temporário
+                        fwrite(tableEnd + 1, sizeof(char), strlen(tableEnd + 1), temp);
+                    }
+                }
+                fclose(tableOfNames);
+                fclose(temp);
+
+                remove("txts/main.txt");
+                rename("txts/temp.txt", "txts/main.txt");
+            } else {
+                printf("Erro ao deletar a tabela\n");
+            }
+        } else {
+            printf("Operacao cancelada\n");
+        }
     } else {
-        printf("Erro ao deletar a tabela");
+        printf("Tabela nao encontrada\n");
     }
-
 }
 
 void addData(){
-    char tableName[15];
+    char tableName[MAX_TABLE_NAME];
+
+    listTables();
+    printf("=========================================\n");
+    do{
+        printf("Digite o nome de uma tabela acima adicionar dados:\n")
+        scanf(" %[^\n]", tableName);
+    } while(!isnameInUse("txts/main.txt", tableName));
     
-    listDataFromTable();
     //verificar se a pk já existe
     //atualizar txt
 }

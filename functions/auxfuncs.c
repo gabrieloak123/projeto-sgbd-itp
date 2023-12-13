@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "funcs.h"
 
 #define MAX_TABLE_NAME 20
@@ -27,39 +28,72 @@ void initMainTable() {
     fclose(tableOfNames);
 }
 
-void changeTablesQuantity(int addOrDropValue){
-    FILE *tableOfNames;
-    tableOfNames = fopen("txts/main.txt", "r");
+void changeColRowQuantity(char fileName[25], int addOrDropValue, char colOrRow[4]){
+    FILE *table;
+    table = fopen(fileName, "r");
 
-    tableCheckError(tableOfNames);
+    tableCheckError(table);
+    
+    char line[MAX_NAMES_CONTENT];
+    fgets(line, sizeof(line), table);
 
-    char line[15];
-    fgets(line, sizeof(line), tableOfNames);
+    int current, newQnt;
 
-    int current, newTablesQnt;
-    if(sscanf(line, "Qnt: %d", &current) != 1){
-        printf("Erro ao ler a quantidade de tabelas\n");
-        return;
+    if (strcmp(colOrRow, "row") == 0) {
+        if (sscanf(line, "RowsQnt: %d", &current) != 1) {
+            printf("Erro ao ler a quantidade de linhas\n");
+            return;
+        }
+        newQnt = addOrDropValue + current;
+
+        fseek(table, 0, SEEK_SET);
+        fprintf(table, "RowsQnt: %d\n", newQnt);
+    } else if (strcmp(colOrRow, "col") == 0) {
+    // Avança para a próxima linha que contém "ColsQnt:"
+        while (fgets(line, sizeof(line), table) != NULL && strncmp(line, "ColsQnt:", 8) != 0) {
+            // Não faz nada enquanto não encontra a linha correta
+        }
+
+        if (sscanf(line, "ColsQnt: %d", &current) != 1) {
+            printf("Erro ao ler a quantidade de colunas\n");
+            return;
+        }
+
+        newQnt = addOrDropValue + current;
+
+        fseek(table, -strlen(line), SEEK_CUR); // Retrocede para o início da linha "ColsQnt:"
+        fprintf(table, "ColsQnt: %d", newQnt);
     }
-    newTablesQnt = addOrDropValue + current;
-
-    fseek(tableOfNames, 0, SEEK_SET);
-    fprintf(tableOfNames, "TablesQnt: %d\n", newTablesQnt);
-    fclose(tableOfNames);
+    fclose(table);
 }
 
-int isnameInUse(char *tableName, char *content){
-    char *subString = strtok(content, "\n");
-
-    while (subString != NULL){
-        char *nameInUse = strstr(subString, tableName);
-
-        if(nameInUse != NULL){
-            return 1;
-        }
-        subString = strtok(NULL, "\n");
+bool isnameInUse(char *fileName, char *targetWord){
+    FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        perror("Erro ao abrir o arquivo");
+        return false;
     }
-    return 0;
+
+    char line[100];
+
+    while (fgets(line, sizeof(line), file) != NULL) {
+        // Remove o caractere de nova linha, se existir
+        line[strcspn(line, "\n")] = '\0';
+
+        // Usa strtok para dividir a linha em palavras separadas por espaços
+        char *token = strtok(line, " ");
+        while (token != NULL) {
+            // Compara a palavra com cada palavra na linha
+            if (strcmp(token, targetWord) == 0) {
+                fclose(file);
+                return true;
+            }
+            token = strtok(NULL, " ");
+        }
+    }
+
+    fclose(file);
+    return false;
 }
 
 bool typeAllowed(char *maybeType){
@@ -93,31 +127,88 @@ void addColumnToFile(FILE *table, char *colType, char *colName){
     }
 }
 
-void readColumns(FILE *table){
+void updatePrimaryKey(char *fileName, char *newPrimaryKey){
+    FILE *file = fopen(fileName, "r+");  // Abre o arquivo para leitura e escrita
+
+    if (file == NULL) {
+        perror("Erro ao abrir o arquivo");
+        exit(EXIT_FAILURE);
+    }
+
+    char line[100];
+    long primaryKeyStartPosition = -1;
+
+    // Procura pela linha que começa com "PrimaryKey:"
+    while (fgets(line, sizeof(line), file) != NULL) {
+        if (strncmp(line, "PrimaryKey:", strlen("PrimaryKey:")) == 0) {
+            primaryKeyStartPosition = ftell(file);
+            break;
+        }
+    }
+
+    if (primaryKeyStartPosition != -1) {
+        // Posiciona o cursor no início do campo PrimaryKey
+        fseek(file, primaryKeyStartPosition - 1, SEEK_SET);
+
+        // Escreve a nova chave primária no arquivo
+        fprintf(file, "%s\n", newPrimaryKey);
+    } else {
+        printf("Campo PrimaryKey não encontrado no arquivo.\n");
+    }
+
+    fclose(file);
+}
+
+void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
     char colType[MAX_COL_TYPE];
     char colName[MAX_COL_NAME];
+    char primaryKey[MAX_COL_NAME];
     int counter = 0;
+    char **colNamesArray;
+
+    fprintf(table, "ColsQnt: 0\n");
+    fprintf(table, "RowsQnt: 0\n");
+    fprintf(table, "PrimaryKey: \n");
+    fprintf(table, "=========================================\n");
+
     printf("Digite respectivamente o tipo e nome da coluna:\n");
     printf("E stop para finalizar a leitura\n");
+
     while (true) {
         scanf("%s", colType);
 
         if (strcmp("stop", colType) == 0) {
-            fprintf(table, "=========================\n");
-            fprintf(table, "ColsQnt: %d\n", counter);
-            fprintf(table, "RowsQnt: 0\n");
-            fprintf(table, "=========================\n");
+            fprintf(table, "=========================================\n");
+
+            printf("Digite qual dos atributos será a Chave Primária:\n");
+            for(int i = 0; i < counter; i++){
+                if(i+1 < counter){
+                    printf("%s - ", colNamesArray[i]);
+                } else {
+                    printf("%s\n", colNamesArray[i]);
+                }
+            }
+            do{
+                printf("(Repetirá até digitar um dos argumentos acima)\n");
+                scanf(" %[^\n]", primaryKey);
+
+                if (isnameInUse(fileName, primaryKey)) {
+                    break;
+                }
+            } while(true);
             break;
         }
         scanf("%s", colName);
         
         if (typeAllowed(colType)) {
-            char content[100];
+            char content[MAX_NAMES_CONTENT];
             readTableContent(table, content, sizeof(content));
 
-            if (isnameInUse(colName, content)){    
+            if (isnameInUse(fileName, colName)){//ajeitar
                 printf("Nome de coluna já em uso\n");
             } else {
+                colNamesArray = realloc(colNamesArray, (counter + 1) * sizeof(char *));
+                colNamesArray[counter] = strdup(colName);
                 // addColumnToFile(table, colType, colName);
                 fprintf(table, "%s - %s\n", colType, colName);
                 counter++;
@@ -125,5 +216,14 @@ void readColumns(FILE *table){
         } else {
             printf("Digite um tipo válido\n");
         }
+
     }
+    
+
+    for (int i = 0; i < counter; i++) {
+        free(colNamesArray[i]);
+    }
+    free(colNamesArray);
+    updatePrimaryKey(fileName, primaryKey);
+    //changeColRowQuantity(fileName, counter, "col");
 }
