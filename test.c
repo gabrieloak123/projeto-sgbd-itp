@@ -8,13 +8,13 @@
 #include <stdio.h>
 #include <string.h>
 
-extern char TableNames[MAX_TABLE_NAME][MAX_NUM_TABLES];
+extern char tableNames[MAX_TABLE_NAME][MAX_NUM_TABLES];
 
 /*void test_readMain() {
     readMain();
     for (int i = 0; i < MAX_NUM_TABLES; i++) {
-        if (TableNames[i][0] != '\0') {
-            printf("Nome da Tabela %d: %s\n", i, TableNames[i]);
+        if (tableNames[i][0] != '\0') {
+            printf("Nome da Tabela %d: %s\n", i, tableNames[i]);
         }
     }
 } */
@@ -51,10 +51,16 @@ void test_readTable() {
     }
 }
 
+void test_writeTable() {
+    Table table;
+    readTable(&table, "testTable");
+    writeTable(&table, "testTable2");
+}
+
 int main() {
     //printf("Testando readMain:\n");
     //test_readMain();
-    printf("\nTestando readTable:\n");
-    test_readTable();
+    //printf("\nTestando readTable:\n");
+    test_writeTable();
     return 0;
 }
