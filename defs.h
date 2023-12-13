@@ -4,6 +4,7 @@
 // Alocar dinâmicamente se quiser
 #define MAX_TABLE_NAME 100
 #define MAX_COLUMNS 100
+#define MAX_COLUMN_TYPE 10
 #define MAX_COLUMN_NAME 100
 #define MAX_NUM_TABLES 100
 #define MAX_REGISTER_SIZE 100
