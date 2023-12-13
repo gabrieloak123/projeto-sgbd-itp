@@ -145,6 +145,7 @@ void readTable(Table *table, char *tableName) {
             token = strtok(NULL, ",");
         }
     }
+    fclose(file);
 }
 
 void writeTable(Table *table, char *tableName) {
