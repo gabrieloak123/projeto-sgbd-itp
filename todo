@@ -1,4 +1,5 @@
 [x] ajeitar verificação de nome de coluna no readCollumn
-[] escrever a pk no cabeçalho
+[x] escrever a pk no cabeçalho
+[] parar o loop do do-while
 [] ajeitar o changeColOrRow, ele não tá conseguindo pegar o número atual de colunas pra iterar
 [x] verificar porque a solicitação da pk tá tirando a última linha da tabela
