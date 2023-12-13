@@ -44,54 +44,22 @@ void listTables(){
 
 void listDataFromTable(){
     char tableName[MAX_TABLE_NAME];
-    Table readingTable;
 
     printf("Digite o nome da tabela:\n");
     scanf(" %[^\n]", tableName);
 
-    readTable(&readingTable, tableName);
-
-    printf("Tabela: %s\n", tableName);
-    for(int i = 0; i < readingTable.numColumns; i++){
-        printf("%-15s", readingTable.columns[i].name);
-    }
-    printf("\n");
-
-    for(int i = 0; i < readingTable.numColumns; i++){
-        for(int j = 0; j < 15; j++) printf("-");
-    }
-    printf("\n");
-
-    for(int i = 0; i < readingTable.numRows; i++){
-        for(int j = 0; j < readingTable.numColumns; j++){
-            switch(readingTable.columns[j].type){
-                case INT:
-                    printf("%-15d", readingTable.columns[j].Data.intData[i]);
-                    break;
-                case FLOAT:
-                    printf("%-15.2f", readingTable.columns[j].Data.floatData[i]);
-                    break;
-                case DOUBLE:
-                    printf("%-15.2lf", readingTable.columns[j].Data.doubleData[i]);
-                    break;
-                case CHAR:
-                    printf("%-15c", readingTable.columns[j].Data.charData[i]);
-                    break;
-                case STRING:
-                    printf("%-15s", readingTable.columns[j].Data.stringData[i]);
-                    break;
-            }
-        }
-        printf("\n");
-    }
+    listDataFrom(tableName);
 }
 
 void deleteLine(){
-    char tableName[15];
-    char pk[15];
-    //verificar se a pk existe
-    listDataFromTable();
-    //verificar se é essa msm
+    char tableName[MAX_TABLE_NAME];
+    char pk[MAX_COLUMN_NAME];
+
+    printf("Digite a tabela que deseja deletar dados:\n");
+    scanf(" %[^\n]", tableName);
+
+    listDataFrom(tableName);
+    
     //apagar linha no txt
     listDataFromTable();
 }
