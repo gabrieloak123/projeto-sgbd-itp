@@ -10,6 +10,14 @@
 #define MAX_COL_NAME 25
 #define MAX_FILE_NAME 25
 
+void rewindFile(FILE *file) {
+    if (file != NULL) {
+        fseek(file, 0, SEEK_SET);
+    } else {
+        printf("Erro ao abrir o arquivo (rewindFile)\n");
+    }
+}
+
 int tableCheckError(FILE *tableName){
     if(tableName == NULL){
         printf("Erro ao abrir o arquivo de nomes de tabela");
@@ -30,39 +38,42 @@ void initMainTable() {
 
 void changeColRowQuantity(char fileName[25], int addOrDropValue, char colOrRow[4]){
     FILE *table;
-    table = fopen(fileName, "r");
+    table = fopen(fileName, "r+");
 
-    tableCheckError(table);
-    
+    if (tableCheckError(table)) {
+        return;
+    }
+
     char line[MAX_NAMES_CONTENT];
-    fgets(line, sizeof(line), table);
+    int current = 0, newQnt;
+    long position;
 
-    int current, newQnt;
-
-    if (strcmp(colOrRow, "row") == 0) {
-        if (sscanf(line, "RowsQnt: %d", &current) != 1) {
-            printf("Erro ao ler a quantidade de linhas\n");
-            return;
-        }
-        newQnt = addOrDropValue + current;
-
-        fseek(table, 0, SEEK_SET);
-        fprintf(table, "RowsQnt: %d\n", newQnt);
-    } else if (strcmp(colOrRow, "col") == 0) {
-    // Avança para a próxima linha que contém "ColsQnt:"
-        while (fgets(line, sizeof(line), table) != NULL && strncmp(line, "ColsQnt:", 8) != 0) {
-            // Não faz nada enquanto não encontra a linha correta
-        }
-
+    if (strcmp(colOrRow, "col") == 0) {
+        position = ftell(table);
+        fgets(line, sizeof(line), table);
         if (sscanf(line, "ColsQnt: %d", &current) != 1) {
             printf("Erro ao ler a quantidade de colunas\n");
             return;
         }
+        newQnt = addOrDropValue + current;
+
+        fseek(table, position, SEEK_SET);
+        fprintf(table, "ColsQnt: %d\n", newQnt);
+    } else if (strcmp(colOrRow, "row") == 0) {
+        // Avança para a próxima linha que contém "RowsQnt:"
+        while (fgets(line, sizeof(line), table) != NULL && strncmp(line, "RowsQnt:", 8) != 0) {
+            position = ftell(table);
+        }
+
+        if (sscanf(line, "RowsQnt: %d", &current) != 1) {
+            printf("Erro ao ler a quantidade de linhas\n");
+            return;
+        }
 
         newQnt = addOrDropValue + current;
 
-        fseek(table, -strlen(line), SEEK_CUR); // Retrocede para o início da linha "ColsQnt:"
-        fprintf(table, "ColsQnt: %d", newQnt);
+        fseek(table, position, SEEK_SET); // Retrocede para o início da linha "RowsQnt:"
+        fprintf(table, "RowsQnt: %d\n", newQnt);
     }
     fclose(table);
 }
@@ -164,7 +175,7 @@ void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
     char colName[MAX_COL_NAME];
     char primaryKey[MAX_COL_NAME];
     int counter = 0;
-    char **colNamesArray;
+    char colNamesArray[100][100];
 
     fprintf(table, "ColsQnt: 0\n");
     fprintf(table, "RowsQnt: 0\n");
@@ -207,9 +218,10 @@ void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
             if (isnameInUse(fileName, colName)){//ajeitar
                 printf("Nome de coluna já em uso\n");
             } else {
-                colNamesArray = realloc(colNamesArray, (counter + 1) * sizeof(char *));
-                colNamesArray[counter] = strdup(colName);
+                //colNamesArray = realloc(colNamesArray, (counter + 1) * sizeof(char *));
+                //colNamesArray[counter] = strdup(colName);
                 // addColumnToFile(table, colType, colName);
+                strcpy(colNamesArray[counter], colName);
                 fprintf(table, "%s - %s\n", colType, colName);
                 counter++;
             }
@@ -220,10 +232,10 @@ void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
     }
     
 
-    for (int i = 0; i < counter; i++) {
+    /*for (int i = 0; i < counter; i++) {
         free(colNamesArray[i]);
-    }
-    free(colNamesArray);
+    }*/
+    //free(colNamesArray);
     updatePrimaryKey(fileName, primaryKey);
-    //changeColRowQuantity(fileName, counter, "col");
+    changeColRowQuantity(fileName, counter, "col");
 }
