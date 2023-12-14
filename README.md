@@ -3,6 +3,7 @@ Projeto da disciplina de Introdução às Técnicas de Programação que visa cr
 
 ##Prereqs
 Projeto compatível com linux, necessário CMake para instalar
+
 Ubuntu/Debian:
 ```
 sudo apt-get install cmake
@@ -80,22 +81,7 @@ Será imprimido todo o conteúdo da tabela desejada
 table_name
 ```
 ***
-### 5.Pesquisar dados
-Filtros de busca: `>`, `<`, `>=`, `<=`, `=`, `~=`
-
-Exemplo de entrada:
-```
-table_campeoes_mundiais_brasileiros
->=
-3
-```
-
-Exemplo de saída:
-```
-São Paulo
-```
-***
-### 6.Apagar linha
+### 5.Apagar linha
 Apaga uma linha específica de uma tabela, para isso é preciso que seja informada uma chave primária na linha abaixo
 
 Exemplo de entrada:
@@ -111,7 +97,7 @@ Digite a Chave Primária referente à linha que será deletada:
 
 ```
 ***
-### 7.Apagar tabela
+### 6.Apagar tabela
 Exclui a tabela digitada da lista de tabelas, cuidado
 Exemplo de entrada:
 ```
