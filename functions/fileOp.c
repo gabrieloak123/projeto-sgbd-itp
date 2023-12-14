@@ -1,7 +1,3 @@
-//
-// Created by dio on 11/12/23.
-//
-
 #include "funcs.h"
 #include "../defs.h"
 #include <stdio.h>
