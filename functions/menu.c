@@ -2,7 +2,7 @@
 #include "funcs.h"
 
 void showMenu(){
-    printf("===========================================\n");
+    printf("=========================================\n");
     printf("Digite o número correspondente à operação:\n");
     printf("0. Sair\n");
     printf("1. Criar tabela\n");
