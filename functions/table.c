@@ -112,7 +112,7 @@ void deleteLine(){
     scanf(" %[^\n]", tableName);
     readTable(&table, tableName);
 
-    printf("A tabela altualmente está assim:\n");
+    printf("A tabela atualmente está assim:\n");
     listDataFrom(tableName);
     
     printf("Digite a Chave Primária referente à linha que será deletada:\n");

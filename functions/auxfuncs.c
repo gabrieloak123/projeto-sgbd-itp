@@ -271,7 +271,6 @@ char *dataTypeToString(Type type) {
 bool validPrimaryKeyValue(Table table, int primaryKeyValue, int *primaryKeyValueIndex){
     bool valueExists = false;
 
-
     for(int i = 0; i < table.numRows; i++){
         if(primaryKeyValue == table.columns[table.primaryKeyIndex].Data.intData[i]){
             valueExists = true;
