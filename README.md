@@ -9,9 +9,13 @@ Ubuntu/Debian:
 sudo apt-get install cmake
 ```
 
-Execute o `run.sh`
+Execute o `run.sh`, crie a pasta txts e execute a main
 ```
 ./run.sh
+chmod +x run.sh
+cd build
+mkdir txts
+./main
 ```
 
 ## Menu
