@@ -24,12 +24,13 @@ void searchData();
 //auxiliar functions
 void showMenu();
 bool typeAllowed(char *maybeType);
-int isnameInUse(char *tableName, char *content);
+bool isnameInUse(char *fileName, char *targetWord);
 int tableCheckError(FILE *tableName);
 void readTableName(char *tableName);
 void changeColRowQuantity(char fileName[MAX_FILE_NAME], int addOrDropValue, char colOrRow[4]);
 void readTableContent(FILE *table, char *tableContent, int maxSize);
 void readColumns(FILE *table, char fileName[MAX_FILE_NAME]);
 void addColumnToFile(FILE *table, char *colType, char *colName);
+void updatePrimaryKey(char *fileName, char *newPrimaryKey);
 
 #endif

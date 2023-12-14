@@ -27,7 +27,7 @@ void createTable() {
     readTableContent(tableOfNames, tableOfNamesContent, sizeof(tableOfNamesContent));
     readTableName(tableName);
 
-    if (isnameInUse(tableName, tableOfNamesContent)) {
+    if (isnameInUse("txts/main.txt", tableName)){
         printf("Nome em uso, use outro\n");
     } else {
         int fileNameSize = strlen(tableName) + 10;
@@ -105,9 +105,15 @@ void dropTable(){
 }
 
 void addData(){
-    char tableName[15];
+    char tableName[MAX_TABLE_NAME];
+
+    listTables();
+    printf("=========================================\n");
+    do{
+        printf("Digite o nome de uma tabela acima adicionar dados:\n");
+        scanf(" %[^\n]", tableName);
+    } while(!isnameInUse("txts/main.txt", tableName));
     
-    listDataFromTable();
     //verificar se a pk já existe
     //atualizar txt
 }
