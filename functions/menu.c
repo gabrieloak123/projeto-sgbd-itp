@@ -9,8 +9,7 @@ void showMenu(){
     printf("2. Listar tabelas\n");
     printf("3. Adicionar dados\n");
     printf("4. Listar dados\n");
-    printf("5. Pesquisar dados\n");
-    printf("6. Apagar linha\n");
-    printf("7. Apagar tabela\n");
+    printf("5. Apagar linha\n");
+    printf("6. Apagar tabela\n");
     printf("===========================================\n");
 }
