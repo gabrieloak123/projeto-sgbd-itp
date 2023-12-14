@@ -49,41 +49,7 @@ void listDataFromTable(){
     printf("Digite o nome da tabela:\n");
     scanf(" %[^\n]", tableName);
 
-    readTable(&readingTable, tableName);
-
-    printf("Tabela: %s\n", tableName);
-    for(int i = 0; i < readingTable.numColumns; i++){
-        printf("%-15s", readingTable.columns[i].name);
-    }
-    printf("\n");
-
-    for(int i = 0; i < readingTable.numColumns; i++){
-        for(int j = 0; j < 15; j++) printf("-");
-    }
-    printf("\n");
-
-    for(int i = 0; i < readingTable.numRows; i++){
-        for(int j = 0; j < readingTable.numColumns; j++){
-            switch(readingTable.columns[j].type){
-                case INT:
-                    printf("%-15d", readingTable.columns[j].Data.intData[i]);
-                    break;
-                case FLOAT:
-                    printf("%-15.2f", readingTable.columns[j].Data.floatData[i]);
-                    break;
-                case DOUBLE:
-                    printf("%-15.2lf", readingTable.columns[j].Data.doubleData[i]);
-                    break;
-                case CHAR:
-                    printf("%-15c", readingTable.columns[j].Data.charData[i]);
-                    break;
-                case STRING:
-                    printf("%-15s", readingTable.columns[j].Data.stringData[i]);
-                    break;
-            }
-        }
-        printf("\n");
-    }
+    listDataFrom(tableName);
 }
 
 void addData() {
@@ -138,13 +104,51 @@ void addData() {
 }
 
 void deleteLine(){
-    char tableName[15];
-    char pk[15];
-    //verificar se a pk existe
-    listDataFromTable();
-    //verificar se é essa msm
-    //apagar linha no txt
-    listDataFromTable();
+    char tableName[MAX_TABLE_NAME];
+    int primaryKey;
+    int primaryKeyIndex;
+    Table table;
+
+    printf("Digite a tabela que deseja deletar dados:\n");
+    scanf(" %[^\n]", tableName);
+    readTable(&table, tableName);
+
+    listDataFrom(tableName);
+    printf("Digite a Chave Primária referente à linha que será deletada:\n");
+    scanf("%d", &primaryKey);
+
+    // Verifica se a chave primária é válida
+    if (!validPrimaryKeyValue(table, primaryKey, &primaryKeyIndex)) {
+        printf("Chave primária inválida.\n");
+        return;
+    }
+
+    // Substitui os valores na linha a ser deletada pelos valores na última linha
+    for (int i = 0; i < table.numColumns; i++) {
+        switch (table.columns[i].type) {
+            case INT:
+                table.columns[i].Data.intData[primaryKeyIndex] = table.columns[i].Data.intData[table.numRows - 1];
+                break;
+            case FLOAT:
+                table.columns[i].Data.floatData[primaryKeyIndex] = table.columns[i].Data.floatData[table.numRows - 1];
+                break;
+            case DOUBLE:
+                table.columns[i].Data.doubleData[primaryKeyIndex] = table.columns[i].Data.doubleData[table.numRows - 1];
+                break;
+            case CHAR:
+                table.columns[i].Data.charData[primaryKeyIndex] = table.columns[i].Data.charData[table.numRows - 1];
+                break;
+            case STRING:
+                strcpy(table.columns[i].Data.stringData[primaryKeyIndex], table.columns[i].Data.stringData[table.numRows - 1]);
+                break;
+        }
+    }
+
+    // Decrementa o número de linhas
+    table.numRows--;
+
+    // Grava a tabela atualizada de volta ao arquivo
+    writeTable(&table, tableName);
 }
 
 void dropTable(){
