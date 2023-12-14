@@ -2,7 +2,7 @@
 Projeto da disciplina de Introdução às Técnicas de Programação que visa criar um Sistema Gerencial de Banco de Dados usando C.
 
 ## Prereqs
-Projeto compatível com linux, necessário CMake para instalar
+Projeto compatível com linux, necessário CMake para rodar
 
 Ubuntu/Debian:
 ```
