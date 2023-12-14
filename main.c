@@ -37,13 +37,9 @@ int main(){
             break;
         case 5:
             system("clear");
-            searchData();
-            break;
-        case 6:
-            system("clear");
             deleteLine();
             break;
-        case 7:
+        case 6:
             system("clear");
             dropTable();
             break;

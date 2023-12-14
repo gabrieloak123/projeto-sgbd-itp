@@ -29,7 +29,7 @@ void readColumns(Table *Table);
 void addColumnToFile(FILE *table, char *colType, char *colName);
 void listDataFrom(char tableName[MAX_TABLE_NAME]);
 char *dataTypeToString(Type type);
-bool validPrimaryKeyValue(Table table, int primaryKeyValue);
+bool validPrimaryKeyValue(Table table, int primaryKeyValue, int *primaryKeyValueIndex);
 
 // file Op functions
 void readMain();
