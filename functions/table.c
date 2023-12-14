@@ -129,7 +129,7 @@ void tablechecker(char tableName[15]){
     printf("Digite o nome da tabela:");
     scanf(" %s",tableName[15]);
     FILE *tabela= fopen(tableName[15],"r");
-    if {*tabela == NULL}{
+    if (*tabela == NULL){
         fclose(FILE *tabela);
         printf("Essa tabela não existe.\n");
         printf("Deseja criar tabela? s/n\n");
