@@ -1,22 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include <stdlib.h>
+#include "../defs.h"
 #include "funcs.h"
 
-#define MAX_TABLE_NAME 20
+/*#define MAX_TABLE_NAME 20
 #define MAX_NAMES_CONTENT 100
 #define MAX_COL_TYPE 10
 #define MAX_COL_NAME 25
-#define MAX_FILE_NAME 25
+#define MAX_FILE_NAME 25*/
 
-void rewindFile(FILE *file) {
-    if (file != NULL) {
-        fseek(file, 0, SEEK_SET);
-    } else {
-        printf("Erro ao abrir o arquivo (rewindFile)\n");
-    }
-}
+extern char tableNames[MAX_TABLE_NAME][MAX_NUM_TABLES];
+extern int numTables;
 
 int tableCheckError(FILE *tableName){
     if(tableName == NULL){
@@ -36,75 +31,28 @@ void initMainTable() {
     fclose(tableOfNames);
 }
 
-void changeColRowQuantity(char fileName[25], int addOrDropValue, char colOrRow[4]){
-    FILE *table;
-    table = fopen(fileName, "r+");
-
-    if (tableCheckError(table)) {
-        return;
-    }
-
-    char line[MAX_NAMES_CONTENT];
-    int current = 0, newQnt;
-    long position;
-
-    if (strcmp(colOrRow, "col") == 0) {
-        position = ftell(table);
-        fgets(line, sizeof(line), table);
-        if (sscanf(line, "ColsQnt: %d", &current) != 1) {
-            printf("Erro ao ler a quantidade de colunas\n");
-            return;
-        }
-        newQnt = addOrDropValue + current;
-
-        fseek(table, position, SEEK_SET);
-        fprintf(table, "ColsQnt: %d\n", newQnt);
-    } else if (strcmp(colOrRow, "row") == 0) {
-        // Avança para a próxima linha que contém "RowsQnt:"
-        while (fgets(line, sizeof(line), table) != NULL && strncmp(line, "RowsQnt:", 8) != 0) {
-            position = ftell(table);
-        }
-
-        if (sscanf(line, "RowsQnt: %d", &current) != 1) {
-            printf("Erro ao ler a quantidade de linhas\n");
-            return;
-        }
-
-        newQnt = addOrDropValue + current;
-
-        fseek(table, position, SEEK_SET); // Retrocede para o início da linha "RowsQnt:"
-        fprintf(table, "RowsQnt: %d\n", newQnt);
-    }
-    fclose(table);
+void readTableContent(FILE *table, char *tableContent, int maxSize){
+    int bytesRead = fread(tableContent, sizeof(char), maxSize - 1, table);
+    tableContent[bytesRead] = '\0';
 }
 
-bool isnameInUse(char *fileName, char *targetWord){
-    FILE *file = fopen(fileName, "r");
-    if (file == NULL) {
-        perror("Erro ao abrir o arquivo");
-        return false;
-    }
-
-    char line[100];
-
-    while (fgets(line, sizeof(line), file) != NULL) {
-        // Remove o caractere de nova linha, se existir
-        line[strcspn(line, "\n")] = '\0';
-
-        // Usa strtok para dividir a linha em palavras separadas por espaços
-        char *token = strtok(line, " ");
-        while (token != NULL) {
-            // Compara a palavra com cada palavra na linha
-            if (strcmp(token, targetWord) == 0) {
-                fclose(file);
-                return true;
-            }
-            token = strtok(NULL, " ");
+// Generalizar essa e a próxima
+int isTableNameInUse(char *tableName){
+    for(int i = 0; i < numTables; i++){
+        if(strcmp(tableNames[i], tableName) == 0){
+            return 1;
         }
     }
+    return 0;
+}
 
-    fclose(file);
-    return false;
+int isColumnNameInUse(char *columnName, Table *table){
+    for(int i = 0; i < table->numColumns; i++){
+        if(strcmp(table->columns[i].name, columnName) == 0){
+            return 1;
+        }
+    }
+    return 0;
 }
 
 bool typeAllowed(char *maybeType){
@@ -118,124 +66,125 @@ bool typeAllowed(char *maybeType){
     return false;
 }
 
-void readTableName(char *tableName){
-    printf("Digite o nome da tabela:");
-    scanf(" %[^\n]", tableName);
-}
-
-void readTableContent(FILE *table, char *tableContent, int maxSize){
-    int bytesRead = fread(tableContent, sizeof(char), maxSize - 1, table);
-    tableContent[bytesRead] = '\0';
-}
-
-void addColumnToFile(FILE *table, char *colType, char *colName){
-    char format[MAX_COL_NAME + MAX_COL_TYPE + 5]; // 5 = strlen(" - \n") + 1 (null terminator)
-    snprintf(format, sizeof(format), "%s - %s\n", colType, colName);
-    if (table != NULL) {
-        fwrite(format, sizeof(char), strlen(format), table);
-    } else {
-        printf("Erro ao abrir o arquivo (addColumnToFile)\n");
-    }
-}
-
-void updatePrimaryKey(char *fileName, char *newPrimaryKey){
-    FILE *file = fopen(fileName, "r+");  // Abre o arquivo para leitura e escrita
-
-    if (file == NULL) {
-        perror("Erro ao abrir o arquivo");
-        exit(EXIT_FAILURE);
-    }
-
-    char line[100];
-    long primaryKeyStartPosition = -1;
-
-    // Procura pela linha que começa com "PrimaryKey:"
-    while (fgets(line, sizeof(line), file) != NULL) {
-        if (strncmp(line, "PrimaryKey:", strlen("PrimaryKey:")) == 0) {
-            primaryKeyStartPosition = ftell(file);
-            break;
-        }
-    }
-
-    if (primaryKeyStartPosition != -1) {
-        // Posiciona o cursor no início do campo PrimaryKey
-        fseek(file, primaryKeyStartPosition - 1, SEEK_SET);
-
-        // Escreve a nova chave primária no arquivo
-        fprintf(file, "%s\n", newPrimaryKey);
-    } else {
-        printf("Campo PrimaryKey não encontrado no arquivo.\n");
-    }
-
-    fclose(file);
-}
-
-void readColumns(FILE *table, char fileName[MAX_FILE_NAME]){
-    char colType[MAX_COL_TYPE];
-    char colName[MAX_COL_NAME];
-    char primaryKey[MAX_COL_NAME];
-    int counter = 0;
-    char colNamesArray[100][100];
-
-    fprintf(table, "ColsQnt: 0\n");
-    fprintf(table, "RowsQnt: 0\n");
-    fprintf(table, "PrimaryKey: \n");
-    fprintf(table, "=========================================\n");
-
+void readColumns(Table *table){
+    char colType[MAX_COLUMN_TYPE];
+    char colName[MAX_COLUMN_NAME];
+    int counter = 0, columnsIndex = 0;
     printf("Digite respectivamente o tipo e nome da coluna:\n");
     printf("E stop para finalizar a leitura\n");
 
     while (true) {
         scanf("%s", colType);
 
-        if (strcmp("stop", colType) == 0) {
-            fprintf(table, "=========================================\n");
+        // O que tu acha de colocar como obrigatório pelo menos uma coluna do tipo int?
 
-            printf("Digite qual dos atributos será a Chave Primária:\n");
-            for(int i = 0; i < counter; i++){
-                if(i+1 < counter){
-                    printf("%s - ", colNamesArray[i]);
-                } else {
-                    printf("%s\n", colNamesArray[i]);
+        if (strcasecmp(colType, "stop") == 0 && counter > 1) {
+            printf("Digite qual dos atributos será a Chave primária:\n");
+            for (int i = 0; i < counter; i++) {
+                if (table->columns[i].type == INT) {
+                    printf("%d - %s\n", i, table->columns[i].name);
                 }
             }
-            do{
-                printf("(Repetirá até digitar um dos argumentos acima)\n");
-                scanf(" %[^\n]", primaryKey);
+            scanf("%d", &(table->primaryKeyIndex));
+            while (table->primaryKeyIndex >= counter || table->primaryKeyIndex < 0) {
+                printf("Digite um número válido\n");
+                scanf("%d", &(table->primaryKeyIndex));
+            }
 
-                if (isnameInUse(fileName, primaryKey)) {
-                    break;
-                }
-            } while(true);
-            break;
+            return;
+        } else if (strcasecmp(colType, "stop") == 0) {
+            table->primaryKeyIndex = 0;
+            return;
         }
         scanf("%s", colName);
-        
-        if (typeAllowed(colType)) {
-            char content[MAX_NAMES_CONTENT];
-            readTableContent(table, content, sizeof(content));
 
-            if (isnameInUse(fileName, colName)){//ajeitar
-                printf("Nome de coluna já em uso\n");
-            } else {
-                //colNamesArray = realloc(colNamesArray, (counter + 1) * sizeof(char *));
-                //colNamesArray[counter] = strdup(colName);
-                // addColumnToFile(table, colType, colName);
-                strcpy(colNamesArray[counter], colName);
-                fprintf(table, "%s - %s\n", colType, colName);
-                counter++;
+        while (isColumnNameInUse(colName, table) == 1){
+            printf("Nome de coluna em uso, digite outro:\n");
+            scanf(" %[^\n]", colName);
+        }
+
+        if (typeAllowed(colType)) {
+            strcpy(table->columns[counter].name, colName);
+            if (strcasecmp(colType, "int") == 0) {
+                table->columns[counter].type = INT;
+            } else if (strcasecmp(colType, "float") == 0) {
+                table->columns[counter].type = FLOAT;
+            } else if (strcasecmp(colType, "double") == 0) {
+                table->columns[counter].type = DOUBLE;
+            } else if (strcasecmp(colType, "char") == 0) {
+                table->columns[counter].type = CHAR;
+            } else if (strcasecmp(colType, "string") == 0) {
+                table->columns[counter].type = STRING;
             }
+            counter++;
+            table->numColumns = counter;
         } else {
             printf("Digite um tipo válido\n");
         }
-
     }
-    
+}
 
-    /*for (int i = 0; i < counter; i++) {
-        free(colNamesArray[i]);
-    }*/
-    //free(colNamesArray);
-    updatePrimaryKey(fileName, primaryKey);
-    changeColRowQuantity(fileName, counter, "col");
+void listDataFrom(char tableName[MAX_TABLE_NAME]){
+    Table readingTable;
+
+    readTable(&readingTable, tableName);
+
+    printf("Tabela: %s\n", tableName);
+    for(int i = 0; i < readingTable.numColumns; i++){
+        printf("%-15s", readingTable.columns[i].name);
+    }
+    printf("\n");
+
+    for(int i = 0; i < readingTable.numColumns; i++){
+        for(int j = 0; j < 15; j++) printf("-");
+    }
+    printf("\n");
+
+    for(int i = 0; i < readingTable.numRows; i++){
+        for(int j = 0; j < readingTable.numColumns; j++){
+            switch(readingTable.columns[j].type){
+                case INT:
+                    printf("%-15d", readingTable.columns[j].Data.intData[i]);
+                    break;
+                case FLOAT:
+                    printf("%-15.2f", readingTable.columns[j].Data.floatData[i]);
+                    break;
+                case DOUBLE:
+                    printf("%-15.2lf", readingTable.columns[j].Data.doubleData[i]);
+                    break;
+                case CHAR:
+                    printf("%-15c", readingTable.columns[j].Data.charData[i]);
+                    break;
+                case STRING:
+                    printf("%-15s", readingTable.columns[j].Data.stringData[i]);
+                    break;
+            }
+        }
+        printf("\n");
+    }
+}
+
+char *dataTypeToString(Type type) {
+    switch (type) {
+        case INT:
+            return "int";
+        case FLOAT:
+            return "float";
+        case DOUBLE:
+            return "double";
+        case CHAR:
+            return "char";
+        case STRING:
+            return "string";
+    }
+}
+
+bool validPrimaryKeyValue(Table table, int primaryKeyValue, int *primaryKeyValueIndex){
+    for(int i = 0; i < table.numRows; i++){
+        if(primaryKeyValue == table.columns[table.primaryKeyIndex].Data.intData[i]){
+            *primaryKeyValueIndex = i;
+            return true;
+        }
+    }
+    return false;
 }

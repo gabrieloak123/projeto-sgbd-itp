@@ -1,12 +1,8 @@
 #include <stdbool.h>
+#include <stdio.h>
+#include "../defs.h"
 #ifndef FUNCS
 #define FUNCS
-
-#define MAX_TABLE_NAME 20
-#define MAX_NAMES_CONTENT 100
-#define MAX_COL_TYPE 10
-#define MAX_COL_NAME 25
-#define MAX_FILE_NAME 25
 
 void printLine(int size);
 void showMenu();
@@ -24,13 +20,21 @@ void searchData();
 //auxiliar functions
 void showMenu();
 bool typeAllowed(char *maybeType);
-bool isnameInUse(char *fileName, char *targetWord);
+int isTableNameInUse(char *tableName);
 int tableCheckError(FILE *tableName);
 void readTableName(char *tableName);
-void changeColRowQuantity(char fileName[MAX_FILE_NAME], int addOrDropValue, char colOrRow[4]);
+void changeTablesQuantity(int addOrDropValue);
 void readTableContent(FILE *table, char *tableContent, int maxSize);
-void readColumns(FILE *table, char fileName[MAX_FILE_NAME]);
+void readColumns(Table *Table);
 void addColumnToFile(FILE *table, char *colType, char *colName);
-void updatePrimaryKey(char *fileName, char *newPrimaryKey);
+void listDataFrom(char tableName[MAX_TABLE_NAME]);
+char *dataTypeToString(Type type);
+bool validPrimaryKeyValue(Table table, int primaryKeyValue, int *primaryKeyValueIndex);
+
+// file Op functions
+void readMain();
+void writeMain();
+void readTable();
+void writeTable();
 
 #endif
