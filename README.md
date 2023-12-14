@@ -1,6 +1,19 @@
 # Projeto de SGBD em C
 Projeto da disciplina de Introdução às Técnicas de Programação que visa criar um Sistema Gerencial de Banco de Dados usando C.
 
+##Prereqs
+Projeto compatível com linux, necessário CMake para instalar
+
+Ubuntu/Debian:
+```
+sudo apt-get install cmake
+```
+
+Execute o `run.sh`
+```
+./run.sh
+```
+
 ## Menu
 Ao iniciar o programa será aberto um menu com as seguintes opções:
 ```
@@ -37,9 +50,8 @@ float altura
 char tipo_sanguineo
 string nome
 stop
------------------------
-Qual a chave primária?
------------------------
+Digite qual dos atributos será a Chave Primária:
+(Repetirá até digitar um dos argumentos acima)
 cpf
 ```
 ***
@@ -69,29 +81,26 @@ Será imprimido todo o conteúdo da tabela desejada
 table_name
 ```
 ***
-### 5.Pesquisar dados
-Filtros de busca: `>`, `<`, `>=`, `<=`, `=`, `~=`
-
-Exemplo de entrada:
-```
-table_campeoes_mundiais_brasileiros
->=
-3
-```
-
-Exemplo de saída:
-```
-São Paulo
-```
-***
-### 6.Apagar linha
+### 5.Apagar linha
 Apaga uma linha específica de uma tabela, para isso é preciso que seja informada uma chave primária na linha abaixo
 
 Exemplo de entrada:
 ```
+Digite a tabela que deseja deletar dados:
 table_times_serie_a
-wherepk 33617465000145
+A tabela atualmente está assim:
+
+Digite a Chave Primária referente à linha que será deletada:
+(Repetirá até ser digitada uma válida)
+3
+
+
 ```
 ***
-### 7.Apagar tabela
+### 6.Apagar tabela
 Exclui a tabela digitada da lista de tabelas, cuidado
+Exemplo de entrada:
+```
+Digite a tabela que deseja deletar:
+
+```
