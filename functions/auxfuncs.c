@@ -31,27 +31,6 @@ void initMainTable() {
     fclose(tableOfNames);
 }
 
-void changeTablesQuantity(int addOrDropValue){
-    FILE *tableOfNames;
-    tableOfNames = fopen("txts/main.txt", "r");
-
-    tableCheckError(tableOfNames);
-
-    char line[15];
-    fgets(line, sizeof(line), tableOfNames);
-
-    int current, newTablesQnt;
-    if(sscanf(line, "Qnt: %d", &current) != 1){
-        printf("Erro ao ler a quantidade de tabelas\n");
-        return;
-    }
-    newTablesQnt = addOrDropValue + current;
-
-    fseek(tableOfNames, 0, SEEK_SET);
-    fprintf(tableOfNames, "TablesQnt: %d\n", newTablesQnt);
-    fclose(tableOfNames);
-}
-
 // Generalizar essa e a próxima
 int isTableNameInUse(char *tableName){
     for(int i = 0; i < numTables; i++){
@@ -82,33 +61,13 @@ bool typeAllowed(char *maybeType){
     return false;
 }
 
-/*
-void readTableName(char *tableName){
-    printf("Digite o nome da tabela:");
-    scanf(" %[^\n]", tableName);
-}
-
-void readTableContent(FILE *table, char *tableContent, int maxSize){
-    int bytesRead = fread(tableContent, sizeof(char), maxSize - 1, table);
-    tableContent[bytesRead] = '\0';
-}
-
-void addColumnToFile(FILE *table, char *colType, char *colName){
-    char format[MAX_COLUMN_NAME + MAX_COLUMN_TYPE + 5]; // 5 = strlen(" - \n") + 1 (null terminator)
-    snprintf(format, sizeof(format), "%s - %s\n", colType, colName);
-    if (table != NULL) {
-        fwrite(format, sizeof(char), strlen(format), table);
-    } else {
-        printf("Erro ao abrir o arquivo (addColumnToFile)\n");
-    }
-} */
-
 void readColumns(Table *table){
     char colType[MAX_COLUMN_TYPE];
     char colName[MAX_COLUMN_NAME];
     int counter = 0, columnsIndex = 0;
     printf("Digite respectivamente o tipo e nome da coluna:\n");
     printf("E stop para finalizar a leitura\n");
+
     while (true) {
         scanf("%s", colType);
 
@@ -118,8 +77,7 @@ void readColumns(Table *table){
             printf("Digite qual dos atributos será a Chave primária:\n");
             for (int i = 0; i < counter; i++) {
                 if (table->columns[i].type == INT) {
-                    columnsIndex++;
-                    printf("%d - %s\n", columnsIndex, table->columns[i].name);
+                    printf("%d - %s\n", i, table->columns[i].name);
                 }
             }
             scanf("%d", &(table->primaryKeyIndex));
@@ -161,6 +119,46 @@ void readColumns(Table *table){
     }
 }
 
+void listDataFrom(char tableName[MAX_TABLE_NAME]){
+    Table readingTable;
+
+    readTable(&readingTable, tableName);
+
+    printf("Tabela: %s\n", tableName);
+    for(int i = 0; i < readingTable.numColumns; i++){
+        printf("%-15s", readingTable.columns[i].name);
+    }
+    printf("\n");
+
+    for(int i = 0; i < readingTable.numColumns; i++){
+        for(int j = 0; j < 15; j++) printf("-");
+    }
+    printf("\n");
+
+    for(int i = 0; i < readingTable.numRows; i++){
+        for(int j = 0; j < readingTable.numColumns; j++){
+            switch(readingTable.columns[j].type){
+                case INT:
+                    printf("%-15d", readingTable.columns[j].Data.intData[i]);
+                    break;
+                case FLOAT:
+                    printf("%-15.2f", readingTable.columns[j].Data.floatData[i]);
+                    break;
+                case DOUBLE:
+                    printf("%-15.2lf", readingTable.columns[j].Data.doubleData[i]);
+                    break;
+                case CHAR:
+                    printf("%-15c", readingTable.columns[j].Data.charData[i]);
+                    break;
+                case STRING:
+                    printf("%-15s", readingTable.columns[j].Data.stringData[i]);
+                    break;
+            }
+        }
+        printf("\n");
+    }
+}
+
 char *dataTypeToString(Type type) {
     switch (type) {
         case INT:
@@ -174,4 +172,14 @@ char *dataTypeToString(Type type) {
         case STRING:
             return "string";
     }
+}
+
+bool validPrimaryKeyValue(Table table, int primaryKeyValue, int *primaryKeyValueIndex){
+    for(int i = 0; i < table.numRows; i++){
+        if(primaryKeyValue == table.columns[table.primaryKeyIndex].Data.intData[i]){
+            *primaryKeyValueIndex = i;
+            return true;
+        }
+    }
+    return false;
 }
