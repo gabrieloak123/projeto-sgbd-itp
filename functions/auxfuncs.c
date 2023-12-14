@@ -31,6 +31,11 @@ void initMainTable() {
     fclose(tableOfNames);
 }
 
+void readTableContent(FILE *table, char *tableContent, int maxSize){
+    int bytesRead = fread(tableContent, sizeof(char), maxSize - 1, table);
+    tableContent[bytesRead] = '\0';
+}
+
 // Generalizar essa e a próxima
 int isTableNameInUse(char *tableName){
     for(int i = 0; i < numTables; i++){
