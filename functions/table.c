@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "../defs.h"
 #include "funcs.h"
 
@@ -59,6 +60,11 @@ void addData() {
     printf("Digite o nome da tabela:\n");
     scanf(" %[^\n]", tableName);
 
+    if (isTableNameInUse(tableName) == 0) {
+        printf("Tabela não encontrada\n");
+        return;
+    }
+
     readTable(&table, tableName);
 
     for (int i = 0; i < table.numColumns; i++) {
@@ -111,6 +117,12 @@ void deleteLine(){
 
     printf("Digite a tabela que deseja deletar dados:\n");
     scanf(" %[^\n]", tableName);
+
+    if (isTableNameInUse(tableName) == 0) {
+        printf("Tabela não encontrada\n");
+        return;
+    }
+
     readTable(&table, tableName);
 
     listDataFrom(tableName);
@@ -151,23 +163,61 @@ void deleteLine(){
     writeTable(&table, tableName);
 }
 
-void dropTable(){
+void dropTable() {
     char tableName[15];
     char fileName[25];
+    char confirmDrop;
 
+    listTables();
+    printf("\n");
     printf("Digite a tabela que deseja deletar:\n");
     scanf(" %[^\n]", tableName);
 
-    //if (nome existe no nameOfTables) then (oq tem aqui embaixo ) else (tabela não existe)
-
     sprintf(fileName, "txts/%s.txt", tableName);
+    if (access(fileName, F_OK) != -1) {
+        printf("Tem certeza que deseja deletar a tabela %s? (S/N)\n", tableName);
+        scanf(" %c", &confirmDrop);
 
-    if(remove(fileName) == 0){
-        printf("Tabela deletada\n");
+        if (confirmDrop == 'S' || confirmDrop == 's') {
+            if (remove(fileName) == 0) {
+                printf("Tabela deletada\n");
+
+                FILE *tableOfNames, *temp;
+                char buffer[256];
+                char tableContent[256];
+
+                tableOfNames = fopen("txts/main.txt", "r");
+                tableCheckError(tableOfNames);
+
+                temp = fopen("txts/temp.txt", "w");
+                tableCheckError(tableOfNames);
+
+                readTableContent(tableOfNames, tableContent, sizeof(tableContent));
+
+                char *tableStart = strstr(tableContent, tableName);
+                if (tableStart != NULL) {
+                    char *tableEnd = strchr(tableStart, '\n');
+                    if (tableEnd != NULL) {
+                        // Copiar a parte antes da tabela para o arquivo temporário
+                        fwrite(tableContent, sizeof(char), tableStart - tableContent, temp);
+                        // Copiar a parte após a tabela para o arquivo temporário
+                        fwrite(tableEnd + 1, sizeof(char), strlen(tableEnd + 1), temp);
+                    }
+                }
+                fclose(tableOfNames);
+                fclose(temp);
+
+                remove("txts/main.txt");
+                rename("txts/temp.txt", "txts/main.txt");
+            } else {
+                printf("Erro ao deletar a tabela\n");
+            }
+        } else {
+            printf("Operacao cancelada\n");
+        }
     } else {
-        printf("Erro ao deletar a tabela");
+        printf("Tabela nao encontrada\n");
     }
-
 }
 
 void searchData(){
