@@ -1,6 +1,18 @@
 # Projeto de SGBD em C
 Projeto da disciplina de Introdução às Técnicas de Programação que visa criar um Sistema Gerencial de Banco de Dados usando C.
 
+##Prereqs
+Projeto compatível com linux, necessário CMake para instalar
+Ubuntu/Debian:
+```
+sudo apt-get install cmake
+```
+
+Execute o `run.sh`
+```
+./run.sh
+```
+
 ## Menu
 Ao iniciar o programa será aberto um menu com as seguintes opções:
 ```
