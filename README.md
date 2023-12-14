@@ -37,9 +37,8 @@ float altura
 char tipo_sanguineo
 string nome
 stop
------------------------
-Qual a chave primária?
------------------------
+Digite qual dos atributos será a Chave Primária:
+(Repetirá até digitar um dos argumentos acima)
 cpf
 ```
 ***
@@ -89,9 +88,21 @@ Apaga uma linha específica de uma tabela, para isso é preciso que seja informa
 
 Exemplo de entrada:
 ```
+Digite a tabela que deseja deletar dados:
 table_times_serie_a
-wherepk 33617465000145
+A tabela atualmente está assim:
+
+Digite a Chave Primária referente à linha que será deletada:
+(Repetirá até ser digitada uma válida)
+3
+
+
 ```
 ***
 ### 7.Apagar tabela
 Exclui a tabela digitada da lista de tabelas, cuidado
+Exemplo de entrada:
+```
+Digite a tabela que deseja deletar:
+
+```
