@@ -1,4 +1,9 @@
 #!/bin/bash
+
+if [[ ! -d "txts" ]]; then
+  mkdir txts
+fi
+
 mkdir build
 cd build 
 wait 
@@ -6,5 +11,4 @@ cmake ..
 wait
 make 
 wait
-cd ..
-./build/main
+./main

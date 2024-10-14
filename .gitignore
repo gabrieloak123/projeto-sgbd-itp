@@ -1,5 +1,6 @@
 *.out
 build/
+txts/
 cmake-build-debug/
 *.xml
 *.iml
